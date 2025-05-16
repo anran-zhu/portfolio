@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ChangeME — Interactive Text</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.5/lib/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #start-btn {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Georgia', serif;
+            font-size: 1.2rem;
+            padding: 0.6rem 1.2rem;
+            background: #fff;
+            border: 1px solid #333;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        main {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <button id="start-btn">Start</button>
+
+    <script>
+        let quote = "all that you touch you change all that you change changes you ";
+        let quoteChars = quote.split('');
+        let chars = [];
+        let fontSize = 16;
+        let spacingY = 16;
+        let mainColor;
+        let prevMouse;
+        let started = false;
+        let myCanvas;
+        let firstInteraction = false;
+        let interactionTimer = null;
+
+        function setup() {
+            myCanvas = createCanvas(windowWidth, windowHeight);
+            mainColor = color('#a3d9ff');
+            textSize(fontSize);
+            textAlign(LEFT, TOP);
+            fillChars();
+            prevMouse = createVector(mouseX, mouseY);
+            background(0);
+
+            // Prevent scrolling when touching canvas
+            document.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+            document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+            fillChars();
+        }
+
+        function draw() {
+            if (!started) return;
+            
+            background(0);
+
+            if (mouseIsPressed) {
+                let m = createVector(mouseX, mouseY);
+                let delta = p5.Vector.sub(m, prevMouse);
+
+                if (delta.mag() > 0.5) {
+                    applyMouseDistortion(mouseX, mouseY, delta);
+                    if (!firstInteraction) {
+                        firstInteraction = true;
+                        // Start the 18-second timer after first interaction
+                        interactionTimer = setTimeout(() => {
+                            window.parent.postMessage('animationStarted', '*');
+                        }, 1000); // Small delay to ensure interaction is intentional
+                    }
+                }
+
+                prevMouse = m;
+            }
+
+            for (let ch of chars) {
+                ch.update();
+                ch.display();
+            }
+        }
+
+        function mousePressed() {
+            if (!started) return;
+            applyMouseDistortion(mouseX, mouseY, createVector(0, 0));
+            prevMouse = createVector(mouseX, mouseY);
+            
+            if (!firstInteraction) {
+                firstInteraction = true;
+                // Start the 18-second timer after first interaction
+                interactionTimer = setTimeout(() => {
+                    window.parent.postMessage('animationStarted', '*');
+                }, 1000); // Small delay to ensure interaction is intentional
+            }
+        }
+
+        function applyMouseDistortion(px, py, delta) {
+            for (let ch of chars) {
+                let d = dist(px, py, ch.x, ch.y);
+                let maxDist = 60;
+                if (d < maxDist) {
+                    let force = map(d, 0, maxDist, 1.5, 0);
+                    let angle = atan2(ch.y - py, ch.x - px);
+                    let strength = random(5, 15) * force;
+
+                    ch.vx = cos(angle) * strength;
+                    ch.vy = sin(angle) * strength;
+                    ch.rotationSpeed = random(-0.4, 0.4) * force;
+                    ch.sizeBoost = random(10, 20);
+                }
+            }
+        }
+
+        function fillChars() {
+            chars = [];
+            let y = fontSize;
+            let index = 0;
+
+            while (y < height - spacingY) {
+                let x = fontSize;
+                while (x < width - fontSize) {
+                    let c = quoteChars[index % quoteChars.length];
+                    let w = textWidth(c || ' ');
+                    chars.push(new BubbleChar(c, x, y));
+                    x += w + fontSize/3;
+                    index++;
+                }
+                y += spacingY;
+            }
+        }
+
+        class BubbleChar {
+            constructor(c, x, y) {
+                this.c = c;
+                this.x = x;
+                this.y = y;
+                this.originalX = x;
+                this.originalY = y;
+                this.vx = 0;
+                this.vy = 0;
+                this.angle = 0;
+                this.rotationSpeed = 0;
+                this.sizeBoost = 0;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                this.vx += (this.originalX - this.x) * 0.1;
+                this.vy += (this.originalY - this.y) * 0.1;
+                this.vx *= 0.75;
+                this.vy *= 0.75;
+
+                this.angle += this.rotationSpeed;
+                this.rotationSpeed += -this.angle * 0.001;
+                this.rotationSpeed *= 0.1;
+
+                this.sizeBoost *= 0.5;
+            }
+
+            display() {
+                push();
+                translate(this.x, this.y);
+                rotate(this.angle);
+                fill(mainColor);
+                noStroke();
+                textSize(fontSize + this.sizeBoost);
+                text(this.c, 0, 0);
+                pop();
+            }
+        }
+
+        // Add message listener for parent window communication
+        window.addEventListener('message', function(event) {
+            if (event.data === 'stopAnimation') {
+                started = false;
+                firstInteraction = false;
+                if (interactionTimer) {
+                    clearTimeout(interactionTimer);
+                    interactionTimer = null;
+                }
+                // Reset the animation state
+                background(0);
+            }
+        });
+
+        // Start button handler
+        document.getElementById('start-btn').addEventListener('click', () => {
+            document.getElementById('start-btn').style.display = 'none';
+            started = true;
+            // Don't send animationStarted message here anymore
+        });
+    </script>
+</body>
+</html> 

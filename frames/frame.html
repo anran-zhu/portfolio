@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Memory Tree</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #FAF8F6;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Lato', sans-serif;
+            color: #5a3e30;
+        }
+
+        #container {
+            position: relative;
+            width: 100%;
+            max-width: 100vw;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Background image */
+        #backgroundImage {
+            height: 100vh;
+            object-fit: cover;
+            display: block;
+            border: 4px solid rgba(90, 62, 48, 0.2);
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(90, 62, 48, 0.1), 0 4px 6px -2px rgba(90, 62, 48, 0.05);
+        }
+
+        /* Text container */
+        #hoverText {
+            background-color: transparent;
+            padding: 4rem;
+            color: #5a3e30;
+            font-family: 'Lato', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+            width: 100%;
+            box-sizing: border-box;
+            margin-left: 2rem;
+        }
+
+        /* Title styling */
+        #hoverText h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.75rem, 5vw, 3.5rem);
+            line-height: 1.2;
+            margin: 0 0 2rem 0;
+            text-align: left;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        /* Paragraph styling */
+        #hoverText p {
+            font-size: clamp(1.125rem, 1.4vw, 1.25rem);
+            line-height: 1.8;
+            margin: 0 0 1.5rem 0;
+            text-align: left;
+            opacity: 0.9;
+            font-weight: 400;
+            max-width: 600px;
+        }
+
+        #hoverText p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* SVG Overlay */
+        #svgObject {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            pointer-events: auto;
+        }
+
+        /* Close button */
+        #closeButton {
+            position: absolute;
+            right: 4rem;
+            bottom: 4rem;
+            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+            color: white;
+            background-color: #687066;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: background-color 0.3s ease;
+        }
+
+        #closeButton:hover {
+            background-color: rgba(104, 112, 102, 0.9);
+        }
+
+        /* Memory date styling */
+        .memory-date {
+            font-family: 'Lato', sans-serif;
+            font-style: italic;
+            color: #687066;
+            margin-top: 1.5rem;
+            font-size: clamp(1rem, 1.2vw, 1.125rem);
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <img id="backgroundImage" src="black_and_white.jpg" alt="Background Image">
+    <object id="svgObject" data="frames.svg" type="image/svg+xml"></object>
+    <div id="hoverText">
+        <h1>I Framed My Memories</h1>
+        <p>I framed my memories between the outstretched branches of trees. They bring colour to my dull life.</p>
+        <p>Hover over each frame to glimpse a memory. Click to unravel its story.</p>
+    </div>
+    <button id="closeButton">Close</button>
+</div>
+
+<script>
+    const svgObject = document.getElementById('svgObject');
+    const backgroundImage = document.getElementById('backgroundImage');
+    const hoverText = document.getElementById('hoverText');
+    const closeButton = document.getElementById('closeButton');
+    let activePath = null;
+    let isLocked = false;
+
+    // Define your regions here
+    const regions = {
+        path1: {
+            image: 'frame1.jpg',
+            title: 'Sintra, Portugal',
+            text: 'The Cabo da Roca Lighthouse. They say it is the loneliest job, being the lighthouse keeper at the end of the world.',
+            date: '17 January, 2025'
+        },
+        path2: {
+            image: 'frame2.jpg',
+            title: 'Lisbon, Portugal',
+            text: 'Watching sunset from a boat in Tagus River. The sunlight stung my eyes and the wind scattered my mind. I held onto the pastel de nata in my pocket that I got from that shop in Belém, the one that supposedly makes the best in the world. It somehow anchored me.',
+            date: '16 January, 2025'
+        },
+        path3: {
+            image: 'frame3.jpg',
+            title: 'Barcelona, Spain',
+            text: 'We got to Barcelona Beach at 6 AM to catch the sunrise. We watched as the sky shifted from tar black to deep blue, then purple, then pink, and finally back to blue. I could be biased becasue I had barely slept for 3 days, but I would say it was the dreamiest moment of that trip.',
+            date: '19 December, 2024'
+        },
+        path4: {
+            image: 'frame4.jpg',
+            title: 'Highlands, Scotland',
+            text: 'It rained when we were hiking in Glenfinnan. We were soaken wet. But for a brief moment, the sun broke through. Suddenly, everyone stopped and stared. I followed their gaze. And there it was, a rainbow. It was the first time I had ever seen one.',
+            date: '12 October, 2024'
+        },
+        path5: {
+            image: 'frame5.jpg',
+            title: 'Hague, Netherlands',
+            text: 'I felt like I had been avoiding tulips, for reasons unknown to me. If I had to guess, it is becasue they bloom in spring. And spring, with all its hope, can also mean disappointment. Hope is a dangerous thing for a woman like me to have, but I guess, I have it.',
+            date: '8 April, 2025'
+        },
+        path6: {
+            image: 'frame6.jpg',
+            title: 'Paris, France',
+            text: 'It was late when I finally got to Paris. I took the beer I had bought in Belgium and sat by the river near my hostel. The lights on the water shimmered like a Van Gogh painting. The river is Pont Louis-Philippe, by the way.',
+            date: '14 April, 2025'
+        },
+        path7: {
+            image: 'frame7.jpg',
+            title: 'Bruges, Belgium',
+            text: 'This is the lake of love at Bruges. Nothing special really. But hey, maybe I was doing it the wrong way. You should not come here all by yourslef.',
+            date: '12 April, 2025'
+        },
+        path8: {
+            image: 'frame8.jpg',
+            title: 'Newcastle, England',
+            text: 'I had just returned back from my trip. The cherry blossoms were in full bloom, more beautiful than any attraction I had seen along the way. Standing beneath that canopy of pink, I thought to myself, I should appreciate life in these everyday moments, not just when I am away.',
+            date: '20 April, 2025'
+        },
+        path9: {
+            image: 'frame9.jpg',
+            title: 'Lisbon, Portugal',
+            text: 'I thought it would be kind of weird, standing in the place I had dreamt (literally, in my sleep) for years. But it was a very peaceful and quiet moment.',
+            date: '15 January, 2025'
+        }
+    };
+
+    console.log("⏳ Waiting for SVG to load...");
+
+    svgObject.addEventListener('load', function() {
+        console.log("✅ SVG Document loaded.");
+
+        const svgDoc = svgObject.contentDocument;
+
+        if (!svgDoc) {
+            console.error("🚫 SVG Document not loaded correctly.");
+            return;
+        } else {
+            console.log("✅ SVG content found!");
+        }
+
+        // Loop through each path and set events
+        Object.keys(regions).forEach((pathId) => {
+            const region = svgDoc.getElementById(pathId);
+            console.log(`🔍 Looking for ${pathId}...`);
+
+            if (region) {
+                console.log(`✅ Path found: ${pathId}`);
+
+                region.style.fillOpacity = "0";
+                region.style.cursor = "pointer";
+
+                region.addEventListener('mouseenter', () => {
+                    if (!isLocked) {
+                        console.log(`🔥 Hovered over ${pathId}!`);
+                        backgroundImage.src = regions[pathId].image;
+                    }
+                });
+
+                region.addEventListener('mouseleave', () => {
+                    if (!isLocked) {
+                        console.log(`❄️ Mouse left ${pathId}.`);
+                        backgroundImage.src = 'black_and_white.jpg';
+                    }
+                });
+
+                region.addEventListener('click', () => {
+                    if (!isLocked) {
+                        console.log(`✅ Selected ${pathId}`);
+                        activePath = pathId;
+                        backgroundImage.src = regions[pathId].image;
+                        hoverText.innerHTML = `
+                            <h1>${regions[pathId].title}</h1>
+                            <p>${regions[pathId].text}</p>
+                            <p class="memory-date">${regions[pathId].date}</p>
+                        `;
+                        isLocked = true;
+                        closeButton.style.display = "block";
+                    }
+                });
+            } else {
+                console.error(`❌ Could not find the path with ID '${pathId}'`);
+            }
+        });
+    });
+
+    closeButton.addEventListener('click', () => {
+        console.log("🗑️ Reset view");
+        backgroundImage.src = 'black_and_white.jpg';
+        hoverText.innerHTML = `
+            <h1>I Framed My Memories</h1>
+            <p>I framed my memories between the outstretched branches of trees. They bring colour to my dull life.</p>
+            <p>Hover over each frame to glimpse a memory. Click to unravel its story.</p>
+        `;
+        closeButton.style.display = "none";
+        isLocked = false;
+        activePath = null;
+    });
+
+</script>
+
+</body>
+</html>

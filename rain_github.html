@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rain Letter — Cinematic</title>
+  <style>
+    body {
+      background: #FAF8F6;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Georgia', serif;
+      overflow: hidden;
+    }
+
+    .paper {
+      display: none; /* Hidden until start */
+      background: white;
+      width: 45vh;
+      height: 80vh;
+      padding: 1.5rem;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      position: relative;
+      line-height: 1.4;
+      font-size: 0.8rem;
+    }
+
+    .base-layer {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .base-layer span {
+      visibility: hidden;
+      white-space: pre;
+    }
+
+    .base-layer span.reveal {
+      visibility: visible;
+    }
+
+    .overlay-layer {
+      position: absolute;
+      top: 3rem;
+      left: 3rem;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .overlay-char {
+      position: absolute;
+      color: #222;
+      font-size: 0.95rem;
+      user-select: none;
+    }
+
+    #start-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Georgia', serif;
+      font-size: 1.2rem;
+      padding: 0.6rem 1.2rem;
+      background: #fff;
+      border: 1px solid #333;
+      cursor: pointer;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div class="paper" id="paper">
+    <div class="base-layer" id="base"></div>
+    <div class="overlay-layer" id="overlay"></div>
+  </div>
+
+  <button id="start-btn">Start</button>
+
+  <script>
+    const base = document.getElementById("base");
+    const overlay = document.getElementById("overlay");
+    const paper = document.getElementById("paper");
+
+    const message = `Sunny days. Where have you gone? I get the strangest feeling you belong. Why does it always rain on me? Is it because I lied when I was seventeen? Why does it always rain on me? Even when the sun is shining, I can't avoid the lightening. I can't stand myself. I am being held up by invisible men.Why does it always rain on me? Is it because I lied when I was seventeen? Why does it always rain on me? Even when the sun is shining, I can't avoid the lightening. Oh, where did the blue sky go? Why is it raining so? It's so cold. Why does it always rain on me? Is it because I lied when I was seventeen? Why does it always rain on me? Even when the sun is shining, I can't avoid the lightening.Why does it always rain on me? Is it because I lied when I was seventeen? Why does it always rain on me? Even when the sun is shining, I can't avoid the lightening. I can't stand myself. I am being held up by invisible men.Why does it always rain on me? Is it because I lied when I was seventeen? Why does it always rain on me? Even when the sun is shining, I can't avoid the lightening.`;
+
+    const spans = [];
+    const revealedSpans = new Set();
+    let revealInterval;
+    let overlayInterval;
+
+    function stopAnimation() {
+      if (revealInterval) clearInterval(revealInterval);
+      if (overlayInterval) clearInterval(overlayInterval);
+      const rainAudio = document.getElementById("rain-sound");
+      rainAudio.pause();
+      rainAudio.currentTime = 0;
+    }
+
+    // Add message listener
+    window.addEventListener('message', function(event) {
+      if (event.data === 'stopAnimation') {
+        stopAnimation();
+      }
+    });
+
+    function startRain() {
+      message.split("").forEach((char, index) => {
+        const span = document.createElement("span");
+        span.textContent = char;
+        span.dataset.index = index;
+        base.appendChild(span);
+        spans.push(span);
+      });
+
+      const instantlyRevealCount = 300;
+      for (let i = 0; i < instantlyRevealCount && i < spans.length; i++) {
+        spans[i].classList.add("reveal");
+        revealedSpans.add(spans[i]);
+      }
+
+      let fullyRevealed = false;
+
+      function revealRandomChar() {
+        const hiddenSpans = spans.filter(s => !s.classList.contains("reveal"));
+        if (hiddenSpans.length > 0) {
+          const target = hiddenSpans[Math.floor(Math.random() * hiddenSpans.length)];
+          target.classList.add("reveal");
+          revealedSpans.add(target);
+          if (Math.random() < 0.05) addOverlayChar(target);
+        } else {
+          fullyRevealed = true;
+        }
+      }
+
+      function overlayRandomChar() {
+        const revealed = Array.from(revealedSpans);
+        if (revealed.length === 0) return;
+        const target = revealed[Math.floor(Math.random() * revealed.length)];
+        addOverlayChar(target);
+      }
+
+      function addOverlayChar(target) {
+        const overlayChar = document.createElement("div");
+        overlayChar.className = "overlay-char";
+        overlayChar.textContent = target.textContent;
+
+        const rect = target.getBoundingClientRect();
+        const parentRect = overlay.getBoundingClientRect();
+
+        const offsetX = (rect.left - parentRect.left) + (Math.random() * 6 - 3);
+        const offsetY = (rect.top - parentRect.top) + (Math.random() * 6 - 3);
+
+        overlayChar.style.left = `${offsetX}px`;
+        overlayChar.style.top = `${offsetY}px`;
+
+        overlay.appendChild(overlayChar);
+      }
+
+      let speedLevel = 0;
+      revealInterval = setInterval(() => {
+        const speedSettings = [
+          { count: 2 },
+          { count: 5 },
+          { count: 10 },
+          { count: 15 }
+        ];
+        const { count } = speedSettings[Math.min(speedLevel, speedSettings.length - 1)];
+        for (let i = 0; i < count; i++) revealRandomChar();
+
+        if (!fullyRevealed) {
+          const revealed = Array.from(revealedSpans);
+          for (let i = 0; i < 6; i++) {
+            const target = revealed[Math.floor(Math.random() * revealed.length)];
+            addOverlayChar(target);
+          }
+        }
+
+        if (fullyRevealed) {
+          clearInterval(revealInterval);
+
+          let overlaySpeed = 0;
+          overlayInterval = setInterval(() => {
+            const overlaySettings = [
+              { count: 2 },
+              { count: 5 },
+              { count: 10 },
+              { count: 15 }
+            ];
+            const { count } = overlaySettings[Math.min(overlaySpeed, overlaySettings.length - 1)];
+            for (let i = 0; i < count + 10; i++) overlayRandomChar();
+          }, 100);
+
+          setTimeout(() => overlaySpeed = 1, 1000);
+          setTimeout(() => overlaySpeed = 2, 1000);
+          setTimeout(() => overlaySpeed = 3, 1500);
+        }
+      }, 100);
+
+      setTimeout(() => speedLevel = 1, 800);
+      setTimeout(() => speedLevel = 2, 1200);
+      setTimeout(() => speedLevel = 3, 2000);
+    }
+
+    document.getElementById("start-btn").addEventListener("click", () => {
+      document.getElementById("start-btn").style.display = "none";
+      paper.style.display = "block";
+      const rainAudio = document.getElementById("rain-sound");
+      rainAudio.volume = 0.3;
+      rainAudio.play().catch(e => console.log("Autoplay blocked:", e));
+      // Notify parent window that animation has started
+      window.parent.postMessage('animationStarted', '*');
+      startRain();
+    });
+  </script>
+
+  <audio id="rain-sound" loop>
+    <source src="rain3.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+</body>
+</html>

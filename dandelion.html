@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dandelion – Sequential Reveal</title>
+  <style>
+    body {
+      background: #000;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #dandelion {
+      position: absolute;
+      left: 40px;
+      top: 100px;
+      width: 120px;
+      height: 180px;
+    }
+
+    .fluff {
+      position: absolute;
+      font-size: 11px;  /* reduced from 14px */
+      color: #fff;
+      opacity: 1;
+      transition: transform 1.5s ease-out, opacity 1.5s ease;
+      pointer-events: none;
+    }
+
+    .hidden-letter {
+      position: absolute;
+      font-size: 11px;  /* reduced from 14px */
+      color: #fff;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .stem-letter {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;  /* reduced from 14px */
+      color: #fff;
+      opacity: 0.8;
+    }
+
+    #blowButton {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      cursor: pointer;
+      background: #A6B5A3;
+      color: #333;
+      border: none;
+      border-radius: 4px;
+      transition: opacity 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+
+<div id="dandelion"></div>
+<div id="messageLayer"></div>
+<button id="blowButton" onclick="blow()">BLOW</button>
+<audio id="windSound" src="wind.mp3" preload="auto"></audio>
+
+<script>
+  const dandelion = document.getElementById('dandelion');
+  const messageLayer = document.getElementById('messageLayer');
+  const windSound = document.getElementById('windSound');
+  const fluffCount = 420;
+  const message = 'não te esqueci.';
+  const radius = 60;  // reduced from 90
+  const centerX = 80;  // fixed position
+  const centerY = 80;  // fixed position
+  const fluffChars = ['l', 'i', 'o', 'e', 'v', 'u'];
+  const fluffElements = [];
+  const messageLetters = [];
+
+  const spacing = 13;  // reduced from 16
+  const totalLetters = message.length;
+  const totalWidth = totalLetters * spacing;
+  const messageStartX = 240;  // moved further right from dandelion
+  const messageY = 180;  // moved down further from dandelion
+
+  let msgIndex = 0;
+  for (let i = 0; i < message.length; i++) {
+    const char = message[i];
+    const span = document.createElement('span');
+    if (char === ' ') {
+      span.style.width = `${spacing}px`;
+      span.style.display = 'inline-block';
+    } else {
+      span.classList.add('hidden-letter');
+      span.textContent = char;
+      span.style.transition = 'opacity 0.4s ease';
+    }
+    span.style.position = 'absolute';
+    span.style.left = `${messageStartX + msgIndex * spacing}px`;
+    span.style.top = `${messageY}px`;
+    messageLayer.appendChild(span);
+    if (char !== ' ') messageLetters.push(span);
+    msgIndex++;
+  }
+
+  for (let i = 0; i < fluffCount; i++) {
+    const span = document.createElement('span');
+    span.classList.add('fluff');
+    span.textContent = fluffChars[Math.floor(Math.random() * fluffChars.length)];
+    const angle = Math.random() * Math.PI * 2;
+    const r = Math.random() * radius;
+    const x = centerX + r * Math.cos(angle);
+    const y = centerY + r * Math.sin(angle);
+    span.style.left = `${x}px`;
+    span.style.top = `${y}px`;
+    span.dataset.x = x;
+    span.dataset.y = y;
+    span.dataset.r = r;
+    span.dataset.angle = angle;
+    dandelion.appendChild(span);
+    fluffElements.push(span);
+  }
+
+  for (let i = -4; i < 32; i++) {
+    const letter = document.createElement('span');
+    letter.classList.add('stem-letter');
+    letter.textContent = 'l';
+    letter.style.top = `${centerY + i * 5}px`;
+    letter.style.left = `${centerX - 5 + (Math.random() * 4 - 2)}px`;
+    dandelion.appendChild(letter);
+  }
+
+  const coreChars = ['l', 'i', 'o', 'e', 'v', 'u'];
+  const coreCount = 60;
+  const coreRadius = 30;
+  for (let i = 0; i < coreCount; i++) {
+    const span = document.createElement('span');
+    span.classList.add('fluff');
+    span.textContent = coreChars[Math.floor(Math.random() * coreChars.length)];
+    const angle = Math.random() * Math.PI * 2;
+    const r = Math.random() * coreRadius;
+    const x = centerX + r * Math.cos(angle);
+    const y = centerY + r * Math.sin(angle);
+    span.style.left = `${x}px`;
+    span.style.top = `${y}px`;
+    span.style.opacity = 1;
+    span.dataset.r = r;
+    span.dataset.x = x;
+    span.dataset.y = y;
+    span.dataset.angle = angle;
+    span.dataset.core = true;
+    span.style.transition = 'none';
+    dandelion.appendChild(span);
+  }
+
+  function blow() {
+    // Hide the blow button with fade
+    blowButton.style.opacity = 0;
+    setTimeout(() => {
+      blowButton.style.display = 'none';
+    }, 300);
+    
+    windSound.currentTime = 0;
+    windSound.play().catch((err) => console.log("Audio error:", err));
+
+    let revealedIndex = -1;
+    const allFluff = fluffElements.filter(el => !el.dataset.core);
+
+    const groupA = allFluff.filter(el => parseFloat(el.dataset.angle) < Math.PI);
+    const groupB = allFluff.filter(el => parseFloat(el.dataset.angle) >= Math.PI);
+
+    const groups = [groupA, groupB];
+
+    groups.forEach((group, groupIndex) => {
+      group.forEach((el, i) => {
+        const delay = groupIndex * 300 + i * 5 + Math.random() * 10;
+
+        setTimeout(() => {
+          const dx = 600 + Math.random() * 100;
+          const dy = -100 + Math.random() * 70;
+          el.style.transition = 'transform 3s ease-out, opacity 2s ease';
+          el.style.transform = `translate(${dx}px, ${dy}px) rotate(${Math.random() * 360}deg)`;
+
+          setTimeout(() => {
+            el.style.opacity = 0;
+          }, 600);  // reduced from 1000
+
+          const interval = setInterval(() => {
+            const rect = el.getBoundingClientRect();
+            if (revealedIndex < messageLetters.length - 1) {
+              const nextLetter = messageLetters[revealedIndex + 1];
+              const mRect = nextLetter.getBoundingClientRect();
+              if (
+                rect.left < mRect.right &&
+                rect.right > mRect.left &&
+                rect.top < mRect.bottom &&
+                rect.bottom > mRect.top
+              ) {
+                revealedIndex++;
+                nextLetter.style.transition = 'opacity 2.2s ease';
+                nextLetter.style.opacity = 1;
+              }
+            }
+          }, 100);  // reduced from 200
+
+          setTimeout(() => clearInterval(interval), 900);  // reduced from 1200
+        }, delay);
+      });
+    });
+
+    // Hide text after animation
+    setTimeout(() => {
+      messageLetters.forEach((msg) => {
+        msg.style.opacity = 0;
+      });
+      
+      // Notify parent after text fades (3 seconds later)
+      setTimeout(() => {
+        window.parent.postMessage('animationStarted', '*');
+      }, 3000);
+      
+    }, 3900);
+  }
+
+  // Add message listener for parent window communication
+  window.addEventListener('message', function(event) {
+    if (event.data === 'stopAnimation') {
+      // Animation already stopped by this point
+    }
+  });
+</script>
+
+</body>
+</html>
