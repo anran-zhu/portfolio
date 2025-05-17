@@ -123,7 +123,7 @@
 <body>
 
 <div id="container">
-    <img id="backgroundImage" src="black_and_white.jpg" alt="Background Image">
+    <img id="backgroundImage" src="black_and_white.JPG" alt="Background Image">
     <object id="svgObject" data="frames.svg" type="image/svg+xml"></object>
     <div id="hoverText">
         <h1>I Framed My Memories</h1>
@@ -234,7 +234,7 @@
                 region.addEventListener('mouseleave', () => {
                     if (!isLocked) {
                         console.log(`❄️ Mouse left ${pathId}.`);
-                        backgroundImage.src = 'black_and_white.jpg';
+                        backgroundImage.src = 'black_and_white.JPG';
                     }
                 });
 
@@ -260,7 +260,7 @@
 
     closeButton.addEventListener('click', () => {
         console.log("🗑️ Reset view");
-        backgroundImage.src = 'black_and_white.jpg';
+        backgroundImage.src = 'black_and_white.JPG';
         hoverText.innerHTML = `
             <h1>I Framed My Memories</h1>
             <p>I framed my memories between the outstretched branches of trees. They bring colour to my dull life.</p>
