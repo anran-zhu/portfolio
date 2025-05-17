@@ -1,0 +1,2098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#5a3e30',secondary:'#687066'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #FAF8F6;
+            color: #4A4039;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        /* Headings with Playfair Display for elegance */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+
+        /* Navigation and buttons - bold Lato for contrast */
+        nav a, button, .nav-link {
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Regular weight for body text */
+        p, span, input, textarea {
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+        }
+
+        /* Light weight for subtle text */
+        .text-primary\/60, .text-primary\/70 {
+            font-weight: 300;
+        }
+
+        /* Adjust heading sizes */
+        h1 {
+            font-size: 3rem;      /* 48px */
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2.25rem;   /* 36px */
+            margin-bottom: 1.25rem;
+        }
+
+        h3 {
+            font-size: 1.75rem;   /* 28px */
+            margin-bottom: 1rem;
+        }
+
+        /* Body text size */
+        p {
+            font-size: 1.125rem;  /* 18px */
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Add some style to quotes if any */
+        blockquote {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+
+        /* Style project cards */
+        .project-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Style thread titles */
+        .thread-item h3 {
+            font-size: 1.5rem;
+            line-height: 1.4;
+        }
+
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            z-index: 1000;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #687066;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        input, textarea {
+            background-color: transparent;
+            border: 1px solid #B4A193;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, textarea:focus {
+            border-color: #687066;
+            outline: none;
+        }
+        
+        .project-card {
+            transition: transform 0.25s ease-out,
+                      opacity 0.25s ease-out;
+            transform-origin: top left;
+            height: auto;
+            position: relative;
+            overflow: hidden;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(180, 161, 147, 0.1), 0 4px 6px -2px rgba(180, 161, 147, 0.05);
+        }
+        
+        .thread-item {
+            transition: transform 0.3s ease;
+        }
+        
+        .thread-item:hover {
+            transform: translateX(4px);
+        }
+        
+        .custom-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 1px solid #B4A193;
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        .custom-checkbox:checked {
+            background-color: #687066;
+            border-color: #687066;
+        }
+        
+        .custom-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 6px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Add new styles for project animations */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            transition: all 0.25s ease-out;
+            will-change: transform;
+        }
+
+        .projects-grid.expanded {
+            grid-template-columns: 1fr;
+            max-width: 100%;
+        }
+
+        .project-card {
+            transition: transform 0.25s ease-out,
+                      opacity 0.25s ease-out;
+            transform-origin: top left;
+            height: auto;
+            position: relative;
+            overflow: hidden;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+
+        .project-card.expanded {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 100%;
+            transform: none;
+            background: white;
+            min-height: 600px;
+            padding: 2rem;
+        }
+
+        .project-card.expanded .project-preview {
+            height: 100%;
+        }
+
+        .project-card.expanded .project-preview img,
+        .project-card.expanded .project-preview > div {
+            display: none;
+        }
+
+        .project-card.expanded .visual-preview {
+            display: block !important;
+            height: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #1e1e1e;
+            position: relative;
+        }
+
+        .project-card.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+            position: absolute;
+        }
+
+        .project-preview {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-card.expanded .project-preview img {
+            height: 400px;
+            object-fit: cover;
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .project-detail {
+            display: none;
+            opacity: 0;
+            transition: all 0.25s ease-out;
+            padding: 2rem;
+            transform: translateX(20px);
+            will-change: transform, opacity;
+        }
+
+        .project-detail.visible {
+            display: flex;
+            flex-direction: column;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .project-detail .project-header {
+            margin-bottom: 2rem;
+        }
+
+        .project-detail .project-description {
+            color: #4A4039;
+            line-height: 1.6;
+        }
+
+        .project-detail .project-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .project-detail .project-tag {
+            background: #4A524A;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+        }
+
+        .back-to-projects {
+            display: none;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 2rem;
+            transform: translateY(10px);
+        }
+
+        .back-to-projects.visible {
+            display: inline-block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Code display styling */
+        .code-preview {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 1.5rem;
+            color: #d4d4d4;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            height: 400px;
+            overflow-y: auto;
+        }
+
+        .code-preview pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        .code-preview .line-number {
+            color: #6e6e6e;
+            margin-right: 1rem;
+            user-select: none;
+        }
+
+        .code-preview .keyword {
+            color: #569cd6;
+        }
+
+        .code-preview .string {
+            color: #ce9178;
+        }
+
+        .code-preview .comment {
+            color: #6a9955;
+        }
+
+        /* Scrollbar styling for code preview */
+        .code-preview::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .code-preview::-webkit-scrollbar-track {
+            background: #2d2d2d;
+            border-radius: 4px;
+        }
+
+        .code-preview::-webkit-scrollbar-thumb {
+            background: #4d4d4d;
+            border-radius: 4px;
+        }
+
+        .code-preview::-webkit-scrollbar-thumb:hover {
+            background: #5d5d5d;
+        }
+
+        .visual-preview {
+            display: none;
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #1e1e1e;
+            position: relative;
+        }
+
+        .visual-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Add styles for feedback overlay */
+        .feedback-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .feedback-overlay.visible {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+
+        .feedback-content {
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+
+        .feedback-question {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .feedback-buttons {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .feedback-button {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feedback-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
+
+        .feedback-button.liked {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .feedback-button.disliked {
+            background: #f44336;
+            border-color: #f44336;
+        }
+
+        .feedback-thanks {
+            display: none;
+            color: white;
+            font-size: 1.2rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .feedback-thanks.visible {
+            display: block;
+        }
+
+        .feedback-back-btn {
+            display: none;
+            color: white;
+            border: 2px solid white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            font-family: inherit;
+            font-size: 1rem;
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .feedback-back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .feedback-back-btn.visible {
+            display: block;
+        }
+
+        .feedback-play-again-btn {
+            display: none;
+            color: white;
+            border: 2px solid white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            font-family: inherit;
+            font-size: 1rem;
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .feedback-play-again-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .feedback-play-again-btn.visible {
+            display: block;
+        }
+
+        /* Add these new styles */
+        .flower-bloom {
+            transform-origin: center;
+        }
+
+        .petal {
+            position: absolute;
+            width: 40px;
+            height: 100px;
+            background: #FFB7C5;
+            border-radius: 50% 50% 0 50%;
+            transform-origin: 50% 80%;
+            opacity: 0;
+            transition: all 0.5s ease-out;
+            top: 50%;
+            left: 50%;
+            margin-left: -20px;
+            margin-top: -80px;
+            border: 2px solid #FF69B4;
+            box-shadow: 0 0 2px #FF69B4;
+        }
+
+        .petal.bloom {
+            opacity: 1;
+            transform: rotate(var(--rotate)) translateY(-20px);
+        }
+
+        .flower-center {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #FFE5B4;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease-out;
+            z-index: 2;
+        }
+
+        .flower-center.bloom {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Add after your existing styles */
+        .memory-frame {
+            border: 1px solid rgba(180, 161, 147, 0.2);
+            background: linear-gradient(to bottom right, #fff, #faf8f6);
+        }
+        
+        .memory-frame:hover {
+            box-shadow: 0 10px 15px -3px rgba(180, 161, 147, 0.1),
+                       0 4px 6px -2px rgba(180, 161, 147, 0.05);
+        }
+        
+        .aspect-w-4 {
+            position: relative;
+            padding-bottom: 75%; /* 4:3 Aspect Ratio */
+        }
+        
+        .aspect-w-4 > img {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            object-fit: cover;
+        }
+
+        /* Add these styles to your existing styles */
+        #lyrics {
+            scroll-behavior: smooth;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        /* Custom scrollbar styling */
+        #lyrics::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #lyrics::-webkit-scrollbar-track {
+            background: rgba(180, 161, 147, 0.1);
+            border-radius: 4px;
+        }
+
+        #lyrics::-webkit-scrollbar-thumb {
+            background: rgba(180, 161, 147, 0.3);
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        #lyrics::-webkit-scrollbar-thumb:hover {
+            background: rgba(180, 161, 147, 0.5);
+        }
+
+        #lyrics p {
+            margin: 5px 0;
+            font-size: 18px;
+            opacity: 0.3;
+            transition: all 0.3s ease;
+            color: #5a3e30;
+            padding: 4px 0;
+        }
+
+        #lyrics p.active {
+            color: #5a3e30;
+            font-size: 22px;
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        audio::-webkit-media-controls-panel {
+            background-color: #1e1e1e;
+        }
+
+        audio::-webkit-media-controls-current-time-display,
+        audio::-webkit-media-controls-time-remaining-display {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="grain"></div>
+    
+    <header class="w-full py-6 px-8 md:px-16 border-b border-primary/30 sticky top-0 bg-[#FAF8F6]/95 backdrop-blur-sm z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-3">
+                <img src="logo.png" alt="Logo" class="w-10 h-10 object-cover rounded-full">
+                <span class="text-xl font-bold text-primary">Anran's Rabbit Hole</span>
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#about" class="nav-link text-sm hover:text-secondary transition-colors">ABOUT</a>
+                <a href="#typography" class="nav-link text-sm hover:text-secondary transition-colors">TYPE</a>
+                <a href="#memory-tree" class="nav-link text-sm hover:text-secondary transition-colors">MEMORY</a>
+                <a href="#three-bulls" class="nav-link text-sm hover:text-secondary transition-colors">BULLS</a>
+                <a href="#wonderland-timer" class="nav-link text-sm hover:text-secondary transition-colors">WONDERLAND</a>
+                <a href="#contact" class="nav-link text-sm hover:text-secondary transition-colors">CONTACT</a>
+            </nav>
+            <button class="md:hidden w-8 h-8 flex items-center justify-center">
+                <i class="ri-menu-line ri-lg"></i>
+            </button>
+        </div>
+    </header>
+    
+    <main>
+        <!-- About Section -->
+        <section id="about" class="pt-4 md:pt-6 pb-4 md:pb-8 px-8 md:px-16">
+            <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+                <div class="order-2 md:order-1">
+                    <h1 class="text-3xl md:text-6xl font-bold mb-6">Hiya, I'm Anran</h1>
+                    <h2 class="text-2xl text-secondary font-bold mb-4">Welcome to my GitHub page!</h2>
+                    <p class="mb-6 leading-relaxed">
+                        This is where I gather <span class="font-bold">all my projects</span>. It's a bit of <span class="font-bold">everything</span>, really.
+                    </p>
+                    <p class="mb-8 leading-relaxed">
+                        Sometimes, I get this "<span class="font-bold">creative itch</span>" where I get these funny little ideas, and they won't leave me alone until I bring them to life.   
+                        <p class="mb-10 leading-relaxed">
+                            <span class="font-bold">Scroll down</span> to explore my work and the inspirations behind it. Hope you enjoy the journey!
+                        
+                    </p>
+                    <div class="flex space-x-4">
+                        <button id="giveFlowerBtn" class="px-8 py-4 bg-primary text-white !rounded-button hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 flex items-center space-x-2">
+                            <span>Let me know you've visited by giving me a flower</span>
+                            <i class="ri-flower-line"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="order-1 md:order-2 relative overflow-hidden">
+                    <img id="profileImage" 
+                        src="rotterdam.jpg" 
+                        alt="Anran's Photo" 
+                        class="w-full h-auto object-cover object-top border-4 border-primary/20 shadow-lg"
+                    >
+                    <img id="flowerProfileImage"
+                        src="rotterdam-flower.PNG" 
+                        alt="Anran's Flower Photo" 
+                        class="absolute inset-0 w-full h-full object-cover object-top border-4 border-primary/20 shadow-lg opacity-0 transition-opacity duration-[1.5s] ease-in-out"
+                    >
+                    <img id="thanksProfileImage"
+                        src="rotterdam-thanks.PNG" 
+                        alt="Anran's Thanks Photo" 
+                        class="absolute inset-0 w-full h-full object-cover object-top border-4 border-primary/20 shadow-lg opacity-0 transition-opacity duration-[1.5s] ease-in-out"
+                    >
+                </div>
+
+                <!-- Flower Animation Container -->
+                <div id="flowerAnimation" class="fixed inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-500 z-50">
+                    <div class="flower-bloom relative w-96 h-96">
+                        <!-- Flower petals will be added via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Typography Section -->
+        <section id="typography" class="py-20 px-8 md:px-16 bg-primary/5">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-2xl md:text-5xl font-bold mb-2">Typography</h2>
+                <p class="text-primary/70 mb-12">Hey kids, spelling is fun!</p>
+                
+                <div class="projects-grid">
+                    <!-- Project 1 -->
+                    <div class="project-card bg-white border border-primary/20 rounded" data-project="1">
+                        <div class="project-preview">
+                            <img 
+                                src="rainpic.png" 
+                                alt="Rain Effect" 
+                                class="w-full h-64 object-cover object-top rounded-t"
+                            >
+                            <div class="p-6">
+                                <span class="text-xs text-secondary bg-secondary/10 px-3 py-1 rounded-full">CREATIVE CODING</span>
+                                <h3 class="text-xl font-bold mt-4 mb-2">Rain Letter</h3>
+                                <p class="text-sm text-primary/70 mb-4">A letter written by raindrops.</p>
+                                <a href="#" class="text-sm text-secondary hover:underline view-project">View project →</a>
+                            </div>
+                            <div class="visual-preview">
+                                <iframe src="rain_github.html" title="Rain Letter"></iframe>
+                            </div>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-header">
+                                <h2 class="text-5xl font-bold mb-2">Rain Letter</h2>
+                                <div class="project-tags">
+                                    <span class="project-tag">JavaScript</span>
+                                    <span class="project-tag">Visual Art</span>
+                                </div>
+                            </div>
+                            <div class="project-description relative flex flex-col min-h-[400px]">
+                                <div class="flex-grow overflow-y-auto pr-4">
+                                    <div id="rain-description-content" class="transition-opacity duration-300">
+                                        <p class="mb-6 leading-relaxed">
+                                            I was writing you a letter but the crashing rain outside my window cut my threads. The words I wanted to say to you spilled onto the paper like raindrops, rushed and heavy. They smudged and bled as if they couldn't bear to be held back...
+                                        </p>
+                                        <p class="mt-2 text-sm italic text-secondary">
+                                            21 April 2025
+                                        </p>
+                                    </div>
+                                    <div id="rain-inspiration-content" class="hidden transition-opacity duration-300">
+                                        <h3 class="text-2xl font-bold mb-4">Inspiration</h3>
+                                        <p class="mb-4 leading-relaxed">
+                                            Song by Scottish band Travis, <span class="italic">Why Does It Always Rain on Me?</span>
+                                        </p>
+                                        <ul class="list-disc list-inside space-y-3">
+                                            <li class="leading-relaxed">"<span class="italic">Why does it always rain on me? Is it because I lied when I was 17?</span>"</li>
+                                            <li class="leading-relaxed">Watch their official music video 
+                                                <a href="https://www.youtube.com/watch?v=PXatLOWjr-k" 
+                                                   target="_blank" 
+                                                   rel="noopener noreferrer" 
+                                                   class="text-secondary hover:underline">
+                                                   here
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="flex-none pt-8 pb-4 flex space-x-4">
+                                    <button id="rain-toggle-content" class="px-8 py-3 bg-primary text-white rounded-button hover:bg-primary/90 transition-all transform hover:scale-105">
+                                        Inspiration
+                                    </button>
+                                    <button class="explore-other-projects px-8 py-3 bg-secondary text-white rounded-button hover:bg-secondary/90 transition-all transform hover:scale-105">
+                                        Explore other projects
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Project 2 -->
+                    <div class="project-card bg-white border border-primary/20 rounded" data-project="2">
+                        <div class="project-preview">
+                            <img 
+                                src="changepic.png" 
+                                alt="ChangeME" 
+                                class="w-full h-64 object-cover object-top rounded-t"
+                            >
+                            <div class="p-6">
+                                <span class="text-xs text-secondary bg-secondary/10 px-3 py-1 rounded-full">CREATIVE CODING</span>
+                                <h3 class="text-xl font-bold mt-4 mb-2">ChangeME</h3>
+                                <p class="text-sm text-primary/70 mb-4">Every touch creates ripples of change through the words.</p>
+                                <a href="#" class="text-sm text-secondary hover:underline view-project">View project →</a>
+                            </div>
+                            <div class="visual-preview">
+                                <iframe src="changeme_project.html" title="ChangeME"></iframe>
+                            </div>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-header">
+                                <h2 class="text-5xl font-bold mb-2">ChangeME</h2>
+                                <div class="project-tags">
+                                    <span class="project-tag">p5.js</span>
+                                    <span class="project-tag">Interactive</span>
+                                    <span class="project-tag">Visual Art</span>
+                                </div>
+                            </div>
+                            <div class="project-description relative flex flex-col min-h-[400px]">
+                                <div class="flex-grow overflow-y-auto pr-4">
+                                    <div id="changeme-description-content" class="transition-opacity duration-300">
+                                        <p class="mb-6 leading-relaxed">
+                                            I often think that humans are interconnected. Everything we do, no matter how insignificant it seems, has an impact. Even just existing, our energy and frequency intertwine.
+                                        </p>
+                                        <p class="mb-6 leading-relaxed">
+                                            So, when I think of you, that thread of thought must reach you, affecting you in some ways. Vice versa, am I thinking of you because you are thinking of me?
+                                        </p>
+                                        <p class="mt-2 text-sm italic text-secondary">
+                                            5 May 2025
+                                        </p>
+                                    </div>
+                                    <div id="changeme-inspiration-content" class="hidden transition-opacity duration-300">
+                                        <h3 class="text-2xl font-bold mb-4">Inspiration</h3>
+                                        <ul class="list-disc list-inside space-y-3">
+                                            <li class="leading-relaxed">"<span class="italic">All that you touch, you change. All that you change, changes you.</span>" - Octavia E. Butler</li>
+                                            <li class="leading-relaxed">Quantum entanglement</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="flex-none pt-8 pb-4 flex space-x-4">
+                                    <button id="changeme-toggle-content" class="px-8 py-3 bg-primary text-white rounded-button hover:bg-primary/90 transition-all transform hover:scale-105">
+                                        Inspiration
+                                    </button>
+                                    <button class="explore-other-projects px-8 py-3 bg-secondary text-white rounded-button hover:bg-secondary/90 transition-all transform hover:scale-105">
+                                        Explore other projects
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Project 3 -->
+                    <div class="project-card bg-white border border-primary/20 rounded" data-project="3">
+                        <div class="project-preview">
+                            <img 
+                                src="dandelionpic.png" 
+                                alt="Dandelion" 
+                                class="w-full h-64 object-cover object-top rounded-t"
+                            >
+                            <div class="p-6">
+                                <span class="text-xs text-secondary bg-secondary/10 px-3 py-1 rounded-full">CREATIVE CODING</span>
+                                <h3 class="text-xl font-bold mt-4 mb-2">Dandelion</h3>
+                                <p class="text-sm text-primary/70 mb-4">Words scatter like dandelion seeds in the wind.</p>
+                                <a href="#" class="text-sm text-secondary hover:underline view-project">View project →</a>
+                            </div>
+                            <div class="visual-preview">
+                                <iframe src="dandelion.html" title="Dandelion"></iframe>
+                            </div>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-header">
+                                <h2 class="text-5xl font-bold mb-2">Dandelion</h2>
+                                <div class="project-tags">
+                                    <span class="project-tag">JavaScript</span>
+                                    <span class="project-tag">Interactive</span>
+                                    <span class="project-tag">Poetry</span>
+                                </div>
+                            </div>
+                            <div class="project-description relative flex flex-col min-h-[400px]">
+                                <div class="flex-grow overflow-y-auto pr-4">
+                                    <div id="dandelion-description-content" class="transition-opacity duration-300">
+                                        <p class="mb-6 leading-relaxed">
+                                            When you see dandelion seeds floating through the air, do you ever wonder how far they've traveled to reach you - across space and time? 
+                                        </p>
+                                        <p class="mb-6 leading-relaxed">
+                                            In broad daylight, the past sends me dandelion seeds. At night, I send them back in my dreams. To my past self and those dark moments: não te esquece.
+                                        </p>
+                                        <p class="mb-6 leading-relaxed">
+                                            I didn't forget you.
+                                        </p>
+                                        <p class="mt-2 text-sm italic text-secondary">
+                                            25 April 2025
+                                        </p>
+                                    </div>
+                                    <div id="dandelion-inspiration-content" class="hidden transition-opacity duration-300">
+                                        <h3 class="text-2xl font-bold mb-4">Inspiration</h3>
+                                        <p class="mb-4 leading-relaxed">
+                                            Inspired by "<span class="italic">The Dandelion Girl</span>" by Robert F. Young
+                                        </p>
+                                        <ul class="list-disc list-inside space-y-3">
+                                            <li class="leading-relaxed">"<span class="italic">Day before yesterday I saw a rabbit, and yesterday a deer, and today, you</span>"</li>
+                                            <li class="leading-relaxed">Read the story 
+                                                <a href="https://infinitemirai.wordpress.com/wp-content/uploads/2013/09/young-robert-f-the-dandelion-girl.pdf" 
+                                                   target="_blank" 
+                                                   rel="noopener noreferrer" 
+                                                   class="text-secondary hover:underline">
+                                                   here</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="flex-none pt-8 pb-4 flex space-x-4">
+                                    <button id="dandelion-toggle-content" class="px-8 py-3 bg-primary text-white rounded-button hover:bg-primary/90 transition-all transform hover:scale-105">
+                                        Inspiration
+                                    </button>
+                                    <button class="explore-other-projects px-8 py-3 bg-secondary text-white rounded-button hover:bg-secondary/90 transition-all transform hover:scale-105">
+                                        Explore other projects
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                </div>
+            </div>
+        </section>
+        
+        <!-- Memory Tree Section -->
+        <section id="memory-tree" class="py-20 px-8 md:px-16 bg-primary/5">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-2xl md:text-5xl font-bold mb-2">Memory Tree</h2>
+                <p class="text-primary/70 mb-12">Memories framed between branches, each with its own story to tell</p>
+                
+                <div class="relative w-full aspect-[21/9] overflow-hidden border-4 border-primary/20 shadow-lg rounded-lg">
+                    <iframe 
+                        src="frames/frame.html" 
+                        class="absolute inset-0 w-full h-full border-none"
+                    ></iframe>
+
+                    
+                </div>
+            </div>
+        </section>
+        
+        <!-- Three Bulls Heads Section -->
+        <section id="three-bulls" class="py-20 px-8 md:px-16">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-2xl md:text-5xl font-bold mb-2">Three Bulls Heads</h2>
+                <p class="text-primary/70 mb-12">Three different mediums, one story to tell. <span class="italic"></span>*On going project*</span></p>
+                
+                <div class="bulls-grid grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- The Novel Card -->
+                    <div class="bull-card relative bg-white border border-primary/20 rounded-lg overflow-hidden group">
+                        <div class="bull-preview w-full">
+                            <div class="aspect-square overflow-hidden">
+                                <img 
+                                    src="n.png" 
+                                    alt="The Novel" 
+                                    class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110"
+                                >
+                            </div>
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer">
+                                <h3 class="text-white text-2xl font-bold">The Novel</h3>
+                            </div>
+                        </div>
+                        <div class="bull-detail hidden w-full">
+                            <div class="py-8 px-16" style="height: 600px;">
+                                <div class="flex flex-col h-full">
+                                    <!-- Fixed header section -->
+                                    <div class="flex-none">
+                                        <span class="text-sm italic text-secondary mb-2 block">The Novel</span>
+                                        <h3 class="text-4xl font-bold mb-6">Three Bulls Heads</h3>
+                                    </div>
+                                    
+                                    <!-- Tags section -->
+                                    <div class="flex flex-wrap gap-2 mb-6">
+                                        <span class="text-sm text-white bg-secondary/80 px-4 py-2 rounded-full">Synchronicity</span>
+                                        <span class="text-sm text-white bg-secondary/80 px-4 py-2 rounded-full">Psychological Horror</span>
+                                        <span class="text-sm text-white bg-secondary/80 px-4 py-2 rounded-full">Unreliable Narrator</span>
+                                        <span class="text-sm text-white bg-secondary/80 px-4 py-2 rounded-full">Surrealism</span>
+                                    </div>
+                                    
+                                    <!-- Description -->
+                                    <div class="flex-grow">
+                                        <p class="text-primary/90 leading-relaxed mb-6">
+                                            The story is about three nights unfolding around a pub called <span class="font-bold">Three Bulls Heads</span>. At first, the protagonist stumbles through these experiences, unaware of the repeating patterns. But soon, she begins to suspect that an invisible force is binding her to a cycle she cannot escape. A chill runs down her spine as her gaze drifts toward the moon...
+                                        </p>
+                                        <p class="text-primary/90 leading-relaxed mb-6">
+                                            Is it all in her imagination? Or is the moon truly guilty?
+                                        </p>
+                                        <p class="text-primary/90 leading-relaxed mb-6">
+                                            And if it is, has its influence reached only her world? Or is it reaching beyond the page as you read these lines…
+                                        </p>
+                                        <p class="text-sm italic text-secondary mt-8">
+                                            Last Updated: 16 February 2025
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Buttons -->
+                                    <div class="flex-none flex space-x-4">
+                                        <a href="#contact" class="px-6 py-3 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors text-center">
+                                            Request Reading
+                                        </a>
+                                        <button class="back-to-bulls px-6 py-3 bg-secondary text-white rounded-button hover:bg-secondary/90 transition-colors">
+                                            Back to Bulls
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- The Song Card -->
+                    <div class="bull-card relative bg-white border border-primary/20 rounded-lg overflow-hidden group">
+                        <div class="bull-preview w-full">
+                            <div class="aspect-square overflow-hidden">
+                                <img 
+                                    src="s.png" 
+                                    alt="The Song" 
+                                    class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110"
+                                >
+                            </div>
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer">
+                                <h3 class="text-white text-2xl font-bold">The Song</h3>
+                            </div>
+                        </div>
+                        <div class="bull-detail hidden w-full">
+                            <div class="grid grid-cols-2 gap-8 p-8" style="height: 600px;">
+                                <div class="flex flex-col h-full">
+                                    <!-- Fixed header section -->
+                                    <div class="flex-none">
+                                        <span class="text-sm italic text-secondary mb-2 block">The Song</span>
+                                        <h3 class="text-4xl font-bold mb-6">The Third Bull Never Left</h3>
+                                        <div class="flex flex-wrap gap-1.5 mb-4">
+                                            <span class="text-xs text-white bg-secondary/80 px-3 py-1.5 rounded-full">SUNO</span>
+                                            <span class="text-xs text-white bg-secondary/80 px-3 py-1.5 rounded-full">Country</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Centered description -->
+                                    <div class="flex-grow flex items-center">
+                                        <div>
+                                            <p class="text-primary/90 leading-relaxed mb-4">
+                                                <span class="font-bold">The Third Bull Never Left</span> is a song inspired by the novel <span class="italic">Three Bulls Heads</span>. Its lyrics resonate with the novel's plot and themes. While the novel unravels the mystery of three nights looping around the pub, the song deepens the enigma with a riddle: "<span class="italic">Three bulls stood at the crossroads. One turned back, one took the road. Where did the third bull go?</span>"
+                                            </p>
+                                            <p class="text-primary/90 leading-relaxed mb-4">
+                                                The song captures the feeling of being caught in a loop, much like the protagonist in Three Bulls Heads, but with a deeper sense of longing and inevitability.
+                                            </p>
+                                            <p class="text-sm italic text-secondary mt-6">
+                                                Last Updated: 16 March 2025
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Fixed footer section -->
+                                    <div class="flex-none flex space-x-4">
+                                        <button class="back-to-bulls px-6 py-3 bg-secondary text-white rounded-button hover:bg-secondary/90 transition-colors">
+                                            Back to Bulls
+                                        </button>
+                                        <button id="pauseButton" class="hidden w-24 px-6 py-3 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors">
+                                            Pause
+                                        </button>
+                                        <button id="startOverButton" class="hidden whitespace-nowrap px-6 py-3 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors">
+                                            Start Over
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex flex-col items-center justify-center relative h-full">
+                                    <!-- Hidden Audio Element -->
+                                    <audio id="audioElement" class="hidden">
+                                        <source src="Third_Bull_Never_Left.mp3" type="audio/mpeg">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                    
+                                    <!-- Initial Play Button -->
+                                    <div id="initialPlayButton" class="absolute inset-0 flex items-center justify-center">
+                                        <button id="playButton" class="w-20 h-20 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-all transform hover:scale-105">
+                                            <i class="ri-play-fill ri-2x"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Lyrics Container (hidden by default) -->
+                                    <div id="lyricsWrapper" class="w-full hidden flex-col h-full">
+                                        <div id="lyrics" class="h-[500px] flex flex-col space-y-2 pr-2 overflow-y-auto bg-primary/5 p-8 rounded-lg">
+                                            <!-- Lyrics will be populated by JavaScript -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- The Game Card -->
+                    <div class="bull-card relative bg-white border border-primary/20 rounded-lg overflow-hidden group">
+                        <div class="bull-preview w-full">
+                            <div class="aspect-square overflow-hidden">
+                                <img 
+                                    src="g.png" 
+                                    alt="The Game" 
+                                    class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110"
+                                >
+                            </div>
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer">
+                                <h3 class="text-white text-2xl font-bold">The Game</h3>
+                            </div>
+                        </div>
+                        <div class="bull-detail hidden w-full">
+                            <div class="py-8 px-16" style="height: 600px;">
+                                <div class="flex flex-col h-full">
+                                    <!-- Fixed header section -->
+                                    <div class="flex-none">
+                                        <span class="text-sm italic text-secondary mb-2 block">The Game</span>
+                                        <h3 class="text-4xl font-bold mb-6">Three Bulls Heads</h3>
+                                        <div class="flex flex-wrap gap-1.5 mb-6">
+                                            <span class="text-xs text-white bg-secondary/80 px-3 py-1.5 rounded-full">Godot</span>
+                                            <span class="text-xs text-white bg-secondary/80 px-3 py-1.5 rounded-full">Puzzle Game</span>
+                                            <span class="text-xs text-white bg-secondary/80 px-3 py-1.5 rounded-full">RPG</span>
+                                            <span class="text-xs text-white bg-secondary/80 px-3 py-1.5 rounded-full">Point and Click</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Description -->
+                                    <div class="flex-grow">
+                                        <p class="text-primary/90 leading-relaxed mb-4">
+                                            Based on the novel Three Bulls Heads, this surreal puzzle game lets you relive three nights trapped around the pub. Your job is to escape each night while unraveling the web of connections that bind you there.
+                                        </p>
+                                        <p class="text-primary/90 leading-relaxed mb-4">
+                                            The game blends dramatic visuals, symbolic surrealism, and fourth-wall breaks. When you escape all three nights, you find yourself in the writer's room—catching glimpses of the writer herself, trapped in the story she’s telling, her life entwined with the fate of the pub.
+                                        </p>
+                                        <p class="text-primary/90 leading-relaxed mb-4">
+                                            Can you break the cycle? 
+                                        </p>
+                                        <p class="text-sm italic text-secondary mt-6">
+                                            Last Updated: 2 March 2025
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Buttons -->
+                                    <div class="flex-none flex space-x-4">
+                                        <button class="back-to-bulls px-6 py-3 bg-secondary text-white rounded-button hover:bg-secondary/90 transition-colors">
+                                            Back to Bulls
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wonderland Timer Section -->
+        <section id="wonderland-timer" class="py-20 px-8 md:px-16 bg-primary/5">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-2xl md:text-5xl font-bold mb-2">Down the Rabbit Hole of Time</h2>
+                <p class="text-primary/90 mb-12">Where every second is a curious adventure. <span class="italic"></span>*On going project*</span></p>
+                <div class="grid md:grid-cols-2 gap-8 p-8 bg-white border border-primary/20 rounded-lg" style="height: 700px;">
+                    <!-- Left side - Visual -->
+                    <div class="flex flex-col space-y-6 items-center md:items-start">
+                        <!-- Main Image -->
+                        <div class="w-full max-w-[500px] aspect-square bg-[#1e1e1e] rounded-lg relative flex items-center justify-center">
+                            <img 
+                                src="timer1.png" 
+                                alt="Wonderland Timer" 
+                                class="w-full h-full object-cover rounded-lg"
+                                id="mainTimerImage"
+                            >
+                            <div class="absolute inset-0 bg-black/10 rounded-lg"></div>
+                        </div>
+
+                        <!-- Sketches Section -->
+                        <div class="flex items-center justify-between w-full max-w-[500px] mt-6">
+                            <!-- Left Arrow -->
+                            <button id="prevSketch" class="p-3 bg-primary/10 rounded-full shadow-lg hover:bg-primary/20 transition-colors">
+                                <i class="ri-arrow-left-s-line text-primary text-3xl"></i>
+                            </button>
+                            
+                            <!-- Title -->
+                            <h3 class="text-xl font-bold text-primary">Sketches</h3>
+                            
+                            <!-- Right Arrow -->
+                            <button id="nextSketch" class="p-3 bg-primary/10 rounded-full shadow-lg hover:bg-primary/20 transition-colors">
+                                <i class="ri-arrow-right-s-line text-primary text-3xl"></i>
+                            </button>
+                        </div>
+                        
+
+                    </div>
+
+                                                <!-- Right side - Content -->
+                    <div class="flex flex-col px-8 pt-6 pb-6 h-full">
+                        <span class="text-sm italic text-secondary mb-2">Last Updated: 22 March 2025</span>
+                        <h2 class="text-4xl font-bold mb-4">Wonderland Timer</h2>
+                        <div class="flex flex-wrap gap-1.5 mb-6">
+                            <span class="text-xs text-white bg-secondary/80 px-3 py-1.5 rounded-full">Electron JS</span>
+                            <span class="text-xs text-white bg-secondary/80 px-3 py-1.5 rounded-full">Slowburn</span>
+                            <span class="text-xs text-white bg-secondary/80 px-3 py-1.5 rounded-full">Study Timer</span>
+                        </div>
+                        
+                        <!-- Tab Content -->
+                        <div class="flex flex-col h-full">
+                            <div class="flex-grow overflow-y-auto pr-2">
+                                <!-- About App Content (Default) -->
+                                <div id="aboutApp" class="tab-content">
+                                    <p class="text-primary/90 leading-relaxed mb-6">
+                                        Wonderland Timer is a desktop application that brings a touch of magic to your study sessions. Choose to study alongside the Mad Hatter, the Duchess, or the White Rabbit—each embodying a different thread of time: the past, the present, and the future.
+                                    </p>
+                                    <p class="text-primary/90 leading-relaxed mb-6">
+                                        With every session, you unravel pieces of their stories, slowly stitching together the mystery of why they're trapped in Wonderland. Piece by piece, you uncover the secrets they hold and the shadow of the Queen of Hearts that lingers over them.
+                                    </p>
+                                    <p class="text-primary/90 leading-relaxed mb-8">
+                                        This is a slow-burn storytelling experience designed to help you understand time management - one study session at a time.
+                                    </p>
+                                </div>
+
+                                <!-- Story Content (Hidden by default) -->
+                                <div id="story" class="tab-content hidden">
+                                    <p class="text-primary/90 leading-relaxed mb-6">
+                                        "Oh dear, I shall be too late!" cried the White Rabbit. You chased him through the rabbit hole and found yourself in Wonderland - a place where time bends and twists, where everyone is just a bit MAD.
+                                    </p>
+                                    <p class="text-primary/90 leading-relaxed mb-6">
+                                        Everyone here is trapped, caught in their own struggle with time. To leave, you must prove you can master time. By understanding their stories, you discover they all share one connection: the mysterious Queen of Hearts...
+                                    </p>
+                                </div>
+
+                                <!-- Characters Content (Hidden by default) -->
+                                <div id="characters" class="tab-content hidden">
+                                    <p class="text-primary/90 leading-relaxed mb-3">
+                                        <span class="font-bold">♣ Mad Hatter:</span> Stuck in the tea party, reliving moments he cannot change.
+                                    </p>
+                                    <p class="text-primary/90 leading-relaxed mb-3">
+                                        <span class="font-bold">♦ Duchess:</span> Overwhelmed by the chaos of the present, always juggling too much at once.
+                                    </p>
+                                    <p class="text-primary/90 leading-relaxed mb-3">
+                                        <span class="font-bold">♠ White Rabbit:</span> Forever anxious about the future, always running but never arriving.
+                                    </p>
+                                    <p class="text-primary/90 leading-relaxed mb-3">
+                                        <span class="font-bold">♥ Queen of Hearts:</span> ???
+                                    </p>
+                                    <p class="text-primary/90 leading-relaxed mb-4">
+                                        <span class="font-bold">☻ Cheshire Cat:</span> A grin in the dark. He always shows up when you need him, but can you trust him?
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Navigation Buttons -->
+                            <div class="flex-none mt-auto pt-6 flex space-x-4">
+                                <button id="aboutAppBtn" 
+                                    class="flex-1 px-6 py-3 bg-secondary/70 text-white rounded-button opacity-70 cursor-default" 
+                                    onclick="showTab('aboutApp', this)">
+                                    About App
+                                </button>
+                                <button id="storyBtn" 
+                                    class="flex-1 px-6 py-3 bg-secondary text-white rounded-button hover:bg-secondary/90 transition-colors cursor-pointer" 
+                                    onclick="showTab('story', this)">
+                                    Story
+                                </button>
+                                <button id="charactersBtn" 
+                                    class="flex-1 px-6 py-3 bg-secondary text-white rounded-button hover:bg-secondary/90 transition-colors cursor-pointer" 
+                                    onclick="showTab('characters', this)">
+                                    Characters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function showTab(tabName, clickedButton) {
+                            // Hide all tab contents
+                            document.querySelectorAll('.tab-content').forEach(content => {
+                                content.classList.add('hidden');
+                            });
+                            
+                            // Show selected tab content
+                            document.getElementById(tabName).classList.remove('hidden');
+                            
+                            // Reset all buttons to clickable state
+                            const buttons = document.querySelectorAll('#aboutAppBtn, #storyBtn, #charactersBtn');
+                            buttons.forEach(button => {
+                                button.classList.remove('opacity-70', 'bg-secondary/70', 'cursor-default');
+                                button.classList.add('bg-secondary', 'hover:bg-secondary/90', 'cursor-pointer');
+                            });
+                            
+                            // Make clicked button lighter and unclickable
+                            clickedButton.classList.add('opacity-70', 'bg-secondary/70', 'cursor-default');
+                            clickedButton.classList.remove('hover:bg-secondary/90', 'cursor-pointer');
+                        }
+
+                        // Initialize the default state (About App tab)
+                        window.addEventListener('DOMContentLoaded', () => {
+                            const aboutAppBtn = document.getElementById('aboutAppBtn');
+                            const aboutAppContent = document.getElementById('aboutApp');
+                            
+                            // Show About App content
+                            document.querySelectorAll('.tab-content').forEach(content => {
+                                content.classList.add('hidden');
+                            });
+                            aboutAppContent.classList.remove('hidden');
+                            
+                            // Style About App button as unclickable
+                            aboutAppBtn.classList.add('opacity-70', 'bg-secondary/70', 'cursor-default');
+                            aboutAppBtn.classList.remove('hover:bg-secondary/90', 'cursor-pointer');
+                        });
+
+                        // Add this after your existing showTab function
+                        const timerImages = ['timer1.png', 'timer2.png', 'timer3.png'];
+                        let currentImageIndex = 0;
+                        const mainTimerImage = document.getElementById('mainTimerImage');
+                        const prevSketch = document.getElementById('prevSketch');
+                        const nextSketch = document.getElementById('nextSketch');
+
+                        function updateTimerImage() {
+                            mainTimerImage.src = timerImages[currentImageIndex];
+                            // Update button states
+                            prevSketch.style.opacity = currentImageIndex === 0 ? '0.5' : '1';
+                            prevSketch.style.cursor = currentImageIndex === 0 ? 'default' : 'pointer';
+                            nextSketch.style.opacity = currentImageIndex === timerImages.length - 1 ? '0.5' : '1';
+                            nextSketch.style.cursor = currentImageIndex === timerImages.length - 1 ? 'default' : 'pointer';
+                        }
+
+                        prevSketch.addEventListener('click', () => {
+                            if (currentImageIndex > 0) {
+                                currentImageIndex--;
+                                updateTimerImage();
+                            }
+                        });
+
+                        nextSketch.addEventListener('click', () => {
+                            if (currentImageIndex < timerImages.length - 1) {
+                                currentImageIndex++;
+                                updateTimerImage();
+                            }
+                        });
+
+                        // Initialize button states
+                        updateTimerImage();
+                    </script>
+                </div>
+            </div>
+        </section>
+        
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 px-8 md:px-16 bg-primary/5">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2 text-center">Let's Connect</h2>
+                <p class="text-primary/70 mb-12 text-center">Interested in working together? I'd love to hear from you.</p>
+                
+                <form class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="name" class="block text-sm mb-2">Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 !rounded-button" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm mb-2">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 !rounded-button" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="subject" class="block text-sm mb-2">Subject</label>
+                        <input type="text" id="subject" class="w-full px-4 py-3 !rounded-button" required>
+                    </div>
+                    
+                    <div>
+                        <label for="message" class="block text-sm mb-2">Message</label>
+                        <textarea id="message" rows="5" class="w-full px-4 py-3 !rounded-button" required></textarea>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <input type="checkbox" id="newsletter" class="custom-checkbox mt-1">
+                        <label for="newsletter" class="ml-3 text-sm text-primary/70">Subscribe to occasional updates about new projects and writings</label>
+                    </div>
+                    
+                    <button type="submit" class="w-full px-6 py-3 bg-secondary text-white !rounded-button hover:bg-secondary/90 transition-colors whitespace-nowrap">Send Message</button>
+                </form>
+                
+                <div class="mt-16 text-center">
+                    <p class="text-sm text-primary/70 mb-4">Prefer to connect elsewhere?</p>
+                    <div class="flex justify-center space-x-6">
+                        <a href="#" class="w-10 h-10 flex items-center justify-center text-primary hover:text-secondary transition-colors">
+                            <i class="ri-instagram-line ri-lg"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center text-primary hover:text-secondary transition-colors">
+                            <i class="ri-twitter-x-line ri-lg"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center text-primary hover:text-secondary transition-colors">
+                            <i class="ri-linkedin-line ri-lg"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center text-primary hover:text-secondary transition-colors">
+                            <i class="ri-pinterest-line ri-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="py-12 px-8 md:px-16 border-t border-primary/20">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-8 md:mb-0">
+                    <a href="#" class="text-xl font-bold text-primary">anran's rabbit hole</a>
+                    <p class="text-sm text-primary/60 mt-2">We are all mad here</p>
+                </div>
+                
+                <div class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-8">
+                    <a href="#about" class="text-sm hover:text-secondary transition-colors">About</a>
+                    <a href="#typography" class="text-sm hover:text-secondary transition-colors">Typography</a>
+                    <a href="#memory-tree" class="text-sm hover:text-secondary transition-colors">Memory Tree</a>
+                    <a href="#three-bulls" class="text-sm hover:text-secondary transition-colors">Three Bulls Heads</a>
+                    <a href="#wonderland-timer" class="text-sm hover:text-secondary transition-colors">Wonderland Timer</a>
+                    <a href="#contact" class="text-sm hover:text-secondary transition-colors">Contact</a>
+                </div>
+            </div>
+            
+            <div class="mt-12 pt-6 border-t border-primary/10 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-xs text-primary/60">© 2025 Anran Zhu. All rights reserved.</p>
+                <p class="text-xs text-primary/60 mt-4 md:mt-0">Designed and built with intention in capturing saudade</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                // Add event listeners for "Explore other projects" buttons
+                document.querySelectorAll('.explore-other-projects').forEach(button => {
+                    button.addEventListener('click', showDefaultView);
+                });
+
+                // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    // Only proceed if href is not just "#"
+                    if (targetId && targetId !== '#') {
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 80,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+
+            // Project card expansion functionality
+            const projectsGrid = document.querySelector('.projects-grid');
+            const projectCards = document.querySelectorAll('.project-card');
+
+            // Only proceed if we found all necessary elements
+            if (!projectsGrid || !projectCards.length) {
+                console.warn('Some required elements were not found');
+                return;
+            }
+
+            let animationTimer = null;
+            let currentMessageListener = null;
+
+            function createFeedbackOverlay(container) {
+                const overlay = document.createElement('div');
+                overlay.className = 'feedback-overlay';
+                
+                const content = document.createElement('div');
+                content.className = 'feedback-content';
+                
+                const question = document.createElement('div');
+                question.className = 'feedback-question';
+                question.textContent = 'Did you like what you just saw?';
+                
+                const buttons = document.createElement('div');
+                buttons.className = 'feedback-buttons';
+                
+                const likeBtn = document.createElement('button');
+                likeBtn.className = 'feedback-button';
+                likeBtn.innerHTML = '<i class="ri-thumb-up-line ri-xl"></i>';
+                
+                const dislikeBtn = document.createElement('button');
+                dislikeBtn.className = 'feedback-button';
+                dislikeBtn.innerHTML = '<i class="ri-thumb-down-line ri-xl"></i>';
+                
+                const thanks = document.createElement('div');
+                thanks.className = 'feedback-thanks';
+                thanks.textContent = 'Thanks for your feedback:)';
+
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = 'flex flex-col items-center gap-4 mt-6';
+
+                const playAgainBtn = document.createElement('button');
+                playAgainBtn.className = 'feedback-play-again-btn w-full';
+                playAgainBtn.textContent = 'Play Again';
+                playAgainBtn.onclick = () => {
+                    // Clear any existing timer
+                    if (animationTimer) {
+                        clearTimeout(animationTimer);
+                        animationTimer = null;
+                    }
+                    
+                    // Hide the overlay
+                    overlay.classList.remove('visible');
+                    
+                    // Get the iframe
+                    const iframe = container.querySelector('iframe');
+                    
+                    if (iframe) {
+                        // Store the original src
+                        const originalSrc = iframe.src;
+                        
+                        // Remove any existing message listeners
+                        if (currentMessageListener) {
+                            window.removeEventListener('message', currentMessageListener);
+                        }
+                        
+                        // Clear the iframe and reset it
+                        iframe.src = 'about:blank';
+                        setTimeout(() => {
+                            iframe.src = originalSrc;
+                            
+                            // Set up new message listener for the reloaded iframe
+                            currentMessageListener = (event) => {
+                                if (event.data === 'animationStarted' || event.data === 'animationRestarted') {
+                                    console.log('Animation started/restarted, setting timer'); // Debug log
+                                    // Clear any existing timer
+                                    if (animationTimer) {
+                                        clearTimeout(animationTimer);
+                                    }
+
+                                    // Get project type from the iframe source
+                                    const projectType = iframe.src.includes('dandelion.html') ? 'dandelion' : 
+                                                      iframe.src.includes('rain_github.html') ? 'rain' :
+                                                      iframe.src.includes('changeme_project.html') ? 'changeme' :
+                                                      'default';
+                                    
+                                    // Set different timers based on project type
+                                    const timerDuration = {
+                                        'dandelion': 2000,   // 2 seconds for dandelion
+                                        'rain': 18000,      // 18 seconds for rain
+                                        'changeme': 15000,  // 15 seconds for changeme
+                                        'default': 10000    // 10 seconds default
+                                    }[projectType];
+
+                                    console.log('Setting timer for project type:', projectType, 'duration:', timerDuration);
+
+                                    // Start the timer
+                                    animationTimer = setTimeout(() => {
+                                        console.log('Timer finished, stopping animation'); // Debug log
+                                        if (iframe && iframe.contentWindow) {
+                                            iframe.contentWindow.postMessage('stopAnimation', '*');
+                                            overlay.classList.add('visible');
+                                        }
+                                    }, timerDuration);
+                                }
+                            };
+                            
+                            window.addEventListener('message', currentMessageListener);
+                        }, 100); // Short delay to ensure clean reload
+                    }
+                };
+
+                const backBtn = document.createElement('button');
+                backBtn.className = 'feedback-back-btn w-full';
+                backBtn.textContent = 'Explore other projects';
+                backBtn.onclick = showDefaultView;
+
+                buttonContainer.appendChild(playAgainBtn);
+                buttonContainer.appendChild(backBtn);
+                
+                buttons.appendChild(likeBtn);
+                buttons.appendChild(dislikeBtn);
+                content.appendChild(question);
+                content.appendChild(buttons);
+                content.appendChild(thanks);
+                content.appendChild(buttonContainer);
+                overlay.appendChild(content);
+                
+                // Add event listeners for the buttons
+                likeBtn.addEventListener('click', () => handleFeedback(true, likeBtn, dislikeBtn, thanks, playAgainBtn, backBtn));
+                dislikeBtn.addEventListener('click', () => handleFeedback(false, likeBtn, dislikeBtn, thanks, playAgainBtn, backBtn));
+                
+                return overlay;
+            }
+
+            function handleFeedback(isLike, likeBtn, dislikeBtn, thanks, playAgainBtn, backBtn) {
+                // Here you would typically send the feedback to your server
+                console.log('Feedback received:', isLike ? 'like' : 'dislike');
+                
+                // Update UI
+                if (isLike) {
+                    likeBtn.classList.add('liked');
+                    dislikeBtn.disabled = true;
+                } else {
+                    dislikeBtn.classList.add('disliked');
+                    likeBtn.disabled = true;
+                }
+                
+                // Show thanks message and buttons
+                thanks.classList.add('visible');
+                if (playAgainBtn) playAgainBtn.classList.add('visible');
+                if (backBtn) backBtn.classList.add('visible');
+            }
+
+            // Function to handle content toggle for all projects
+            function setupContentToggle(projectId) {
+                const toggleBtn = document.getElementById(`${projectId}-toggle-content`);
+                const descContent = document.getElementById(`${projectId}-description-content`);
+                const inspContent = document.getElementById(`${projectId}-inspiration-content`);
+                
+                if (toggleBtn && descContent && inspContent) {
+                    toggleBtn.addEventListener('click', () => {
+                        // Toggle visibility with fade effect
+                        if (descContent.classList.contains('hidden')) {
+                            // Switch to description
+                            inspContent.classList.add('opacity-0');
+                            setTimeout(() => {
+                                inspContent.classList.add('hidden');
+                                descContent.classList.remove('hidden');
+                                setTimeout(() => {
+                                    descContent.classList.remove('opacity-0');
+                                }, 50);
+                            }, 300);
+                            toggleBtn.textContent = 'Inspiration';
+                        } else {
+                            // Switch to inspiration
+                            descContent.classList.add('opacity-0');
+                            setTimeout(() => {
+                                descContent.classList.add('hidden');
+                                inspContent.classList.remove('hidden');
+                                setTimeout(() => {
+                                    inspContent.classList.remove('opacity-0');
+                                }, 50);
+                            }, 300);
+                            toggleBtn.textContent = 'Back';
+                        }
+                    });
+                }
+            }
+
+            function showExpandedView(card) {
+                // Hide other cards
+                projectCards.forEach(otherCard => {
+                    if (otherCard !== card) {
+                        otherCard.style.opacity = '0';
+                        otherCard.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            otherCard.classList.add('hidden');
+                        }, 200);
+                    }
+                });
+
+                // Get the first project card's position to use as reference
+                const firstCard = projectCards[0];
+                const firstCardTop = firstCard.getBoundingClientRect().top + window.pageYOffset;
+
+                requestAnimationFrame(() => {
+                    projectsGrid.classList.add('expanded');
+                    card.classList.add('expanded');
+
+                    const projectDetail = card.querySelector('.project-detail');
+                    if (projectDetail) {
+                        setTimeout(() => {
+                            projectDetail.classList.add('visible');
+                            // Set up content toggle for each project
+                            if (card.querySelector('iframe[src*="rain_github.html"]')) {
+                                setupContentToggle('rain');
+                            } else if (card.querySelector('iframe[src*="changeme_project.html"]')) {
+                                setupContentToggle('changeme');
+                            } else if (card.querySelector('iframe[src*="dandelion.html"]')) {
+                                setupContentToggle('dandelion');
+                            }
+                        }, 200);
+                    }
+
+                    // Scroll to the same position as the first card
+                    const offset = 100;
+                    window.scrollTo({
+                        top: firstCardTop - offset,
+                        behavior: 'smooth'
+                    });
+
+                    // Get the iframe and set up the timer
+                    const iframe = card.querySelector('iframe');
+                    if (iframe) {
+                        // Create and add the feedback overlay
+                        const feedbackOverlay = createFeedbackOverlay(iframe.parentElement);
+                        iframe.parentElement.appendChild(feedbackOverlay);
+                        
+                        // Remove any existing message listener
+                        if (currentMessageListener) {
+                            window.removeEventListener('message', currentMessageListener);
+                            currentMessageListener = null;
+                        }
+
+                        // Clear any existing timer
+                        if (animationTimer) {
+                            clearTimeout(animationTimer);
+                            animationTimer = null;
+                        }
+                        
+                        // Create new message listener
+                        currentMessageListener = function(event) {
+                            console.log('Received message:', event.data); // Debug log
+                            
+                            if (event.data === 'animationStarted' || event.data === 'animationRestarted') {
+                                console.log('Animation started/restarted, setting timer'); // Debug log
+                                // Clear any existing timer
+                                if (animationTimer) {
+                                    clearTimeout(animationTimer);
+                                }
+
+                                // Get project type from the iframe source
+                                const projectType = iframe.src.includes('dandelion.html') ? 'dandelion' : 
+                                                  iframe.src.includes('rain_github.html') ? 'rain' :
+                                                  iframe.src.includes('changeme_project.html') ? 'changeme' :
+                                                  'default';
+                                
+                                // Set different timers based on project type
+                                const timerDuration = {
+                                    'dandelion': 2000,   // 2 seconds for dandelion
+                                    'rain': 18000,      // 18 seconds for rain
+                                    'changeme': 15000,  // 15 seconds for changeme
+                                    'default': 10000    // 10 seconds default
+                                }[projectType];
+
+                                console.log('Setting timer for project type:', projectType, 'duration:', timerDuration);
+
+                                // Start the timer
+                                animationTimer = setTimeout(() => {
+                                    console.log('Timer finished, stopping animation'); // Debug log
+                                    if (iframe && iframe.contentWindow) {
+                                        iframe.contentWindow.postMessage('stopAnimation', '*');
+                                        feedbackOverlay.classList.add('visible');
+                                    }
+                                }, timerDuration);
+                            } else if (event.data === 'animationStopped') {
+                                console.log('Animation stopped by iframe');
+                                feedbackOverlay.classList.add('visible');
+                            }
+                        };
+                        
+                        // Add the new listener
+                        window.addEventListener('message', currentMessageListener);
+
+                        // Set up a one-time load event listener to start the animation
+                        iframe.onload = function() {
+                            // Remove the onload listener to prevent multiple triggers
+                            iframe.onload = null;
+                            
+                            // Short delay to ensure the iframe content is ready
+                            setTimeout(() => {
+                                if (iframe.contentWindow) {
+                                    iframe.contentWindow.postMessage('startAnimation', '*');
+                                }
+                            }, 500);
+                        };
+                    }
+                });
+            }
+
+            function showDefaultView() {
+                const expandedCard = document.querySelector('.project-card.expanded');
+                if (!expandedCard) return;
+
+                // Remove feedback overlay if it exists
+                const overlay = expandedCard.querySelector('.feedback-overlay');
+                if (overlay) {
+                    overlay.remove();
+                }
+
+                // Remove the message event listener
+                if (currentMessageListener) {
+                    window.removeEventListener('message', currentMessageListener);
+                    currentMessageListener = null;
+                }
+
+                // Clear any existing timers
+                if (animationTimer) {
+                    clearTimeout(animationTimer);
+                    animationTimer = null;
+                }
+
+                const projectDetail = expandedCard.querySelector('.project-detail');
+                if (projectDetail) {
+                    projectDetail.classList.remove('visible');
+                }
+
+                // Stop the animation by setting iframe src to blank
+                const iframe = expandedCard.querySelector('iframe');
+                if (iframe) {
+                    const originalSrc = iframe.src;
+                    iframe.src = 'about:blank';
+                    setTimeout(() => {
+                        iframe.src = originalSrc;
+                    }, 100);
+                    // Remove any stop message if it exists
+                    const message = iframe.parentElement.querySelector('div');
+                    if (message) {
+                        message.remove();
+                    }
+                }
+
+                requestAnimationFrame(() => {
+                    projectsGrid.classList.remove('expanded');
+                    expandedCard.classList.remove('expanded');
+                    
+                    projectCards.forEach(card => {
+                        card.classList.remove('hidden');
+                        requestAnimationFrame(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'none';
+                        });
+                    });
+                });
+            }
+
+            // Add click handlers only to cards that have the view project link
+            projectCards.forEach(card => {
+                const viewProjectLink = card.querySelector('.view-project');
+                if (viewProjectLink) {
+                    viewProjectLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        showExpandedView(card);
+                    });
+                }
+            });
+
+            const giveFlowerBtn = document.getElementById('giveFlowerBtn');
+            const flowerAnimation = document.getElementById('flowerAnimation');
+            const profileImage = document.getElementById('profileImage');
+            const flowerProfileImage = document.getElementById('flowerProfileImage');
+            const thanksProfileImage = document.getElementById('thanksProfileImage');
+
+            function createFlower() {
+                const flowerContainer = flowerAnimation.querySelector('.flower-bloom');
+                flowerContainer.innerHTML = ''; // Clear any existing flower
+
+                // Create center
+                const center = document.createElement('div');
+                center.className = 'flower-center';
+                flowerContainer.appendChild(center);
+
+                // Create petals
+                const petalCount = 12;
+                for (let i = 0; i < petalCount; i++) {
+                    const petal = document.createElement('div');
+                    petal.className = 'petal';
+                    petal.style.setProperty('--rotate', `${(360 / petalCount) * i}deg`);
+                    flowerContainer.appendChild(petal);
+                }
+
+                return { center, petals: flowerContainer.querySelectorAll('.petal') };
+            }
+
+            function animateFlower() {
+                flowerAnimation.style.opacity = '1';
+                const { center, petals } = createFlower();
+
+                // Animate center
+                setTimeout(() => center.classList.add('bloom'), 100);
+
+                // Animate petals
+                petals.forEach((petal, index) => {
+                    setTimeout(() => petal.classList.add('bloom'), 200 + (index * 100));
+                });
+
+                // Sequence: Fade out flower animation -> Show thanks image immediately
+                setTimeout(() => {
+                    flowerAnimation.style.opacity = '0';
+                    thanksProfileImage.style.opacity = '1';
+                }, 2500);
+            }
+
+            giveFlowerBtn.addEventListener('click', function() {
+                this.disabled = true;
+                this.style.opacity = '0.5';
+                animateFlower();
+            });
+
+            // Add Bulls JavaScript
+            const bullsGrid = document.querySelector('.bulls-grid');
+            const bullCards = document.querySelectorAll('.bull-card');
+            
+            bullCards.forEach(card => {
+                const preview = card.querySelector('.bull-preview');
+                const detail = card.querySelector('.bull-detail');
+                const backBtn = card.querySelector('.back-to-bulls');
+                let lyricsInitialized = false;
+                
+                // Click on preview to expand
+                preview.addEventListener('click', () => {
+                    // Hide other cards
+                    bullCards.forEach(otherCard => {
+                        if (otherCard !== card) {
+                            otherCard.style.display = 'none';
+                        }
+                    });
+                    
+                    // Show detail view
+                    preview.style.display = 'none';
+                    detail.classList.remove('hidden');
+                    
+                    // Initialize lyrics if not already done
+                    if (!lyricsInitialized && card.querySelector('#lyrics')) {
+                        const audio = card.querySelector('#audioElement');
+                        const lyricsContainer = card.querySelector('#lyrics');
+                        const lyrics = [];
+                        
+                        console.log('Initializing lyrics...');
+                        
+                        // Fetch and parse the LRC file
+                
+                        fetch('audio/lyrics.lrc', {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'text/plain'
+                            }
+                            
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! status: ${response.status}`);
+                                }
+                                return response.text();
+                            })
+                            .then(data => {
+                                console.log('Successfully loaded lyrics file');
+                                // Clear any existing content
+                                lyricsContainer.innerHTML = '';
+                                
+                                const lines = data.split('\n');
+                                lines.forEach(line => {
+                                    const match = line.match(/\[(\d+):(\d+\.\d+)\](.*)/);
+                                    if (match) {
+                                        const minutes = parseInt(match[1]);
+                                        const seconds = parseFloat(match[2]);
+                                        const text = match[3].trim();
+                                        const time = minutes * 60 + seconds;
+                                        lyrics.push({ time, text });
+
+                                        const p = document.createElement('p');
+                                        p.textContent = text;
+                                        p.dataset.time = time; // Store timestamp in data attribute
+                                        // Add click handler to seek to timestamp
+                                        p.addEventListener('click', () => {
+                                            audio.currentTime = time;
+                                            // Force immediate visual update
+                                            Array.from(lyricsContainer.getElementsByTagName('p')).forEach(p => p.classList.remove('active'));
+                                            p.classList.add('active');
+                                            // Reset user scroll state
+                                            userScrolled = false;
+                                            // Scroll to the clicked lyric
+                                            const offset = p.offsetTop - lyricsContainer.clientHeight / 2 + p.clientHeight / 2;
+                                            lyricsContainer.scrollTo({
+                                                top: offset,
+                                                behavior: "smooth"
+                                            });
+                                        });
+                                        // Add hover style
+                                        p.style.cursor = 'pointer';
+                                        lyricsContainer.appendChild(p);
+                                    }
+                                });
+                                console.log(`Loaded ${lyrics.length} lyrics lines`);
+                                
+                                let scrollTimeout;
+                                let userScrolled = false;
+
+                                // Handle manual scrolling
+                                lyricsContainer.addEventListener('scroll', () => {
+                                    userScrolled = true;
+                                    
+                                    // Clear existing timeout
+                                    if (scrollTimeout) {
+                                        clearTimeout(scrollTimeout);
+                                    }
+                                    
+                                    // Set new timeout
+                                    scrollTimeout = setTimeout(() => {
+                                        userScrolled = false;
+                                    }, 3000);
+                                });
+
+                                const playButton = card.querySelector('#playButton');
+                                const pauseButton = card.querySelector('#pauseButton');
+                                const lyricsWrapper = card.querySelector('#lyricsWrapper');
+
+                                // Play button click handler
+                                const initialPlayButton = card.querySelector('#initialPlayButton');
+                                const startOverButton = card.querySelector('#startOverButton');
+                                let isPlaying = false;
+
+                                function updatePlaybackState(playing) {
+                                    isPlaying = playing;
+                                    if (playing) {
+                                        initialPlayButton.style.display = 'none';
+                                        lyricsWrapper.style.display = 'flex';
+                                        pauseButton.textContent = 'Pause';
+                                        pauseButton.style.display = 'block';
+                                        startOverButton.style.display = 'block';
+                                    } else {
+                                        pauseButton.textContent = 'Resume';
+                                    }
+                                }
+
+                                playButton.addEventListener('click', () => {
+                                    audio.play();
+                                    updatePlaybackState(true);
+                                });
+
+                                // Pause/Resume button click handler
+                                pauseButton.addEventListener('click', () => {
+                                    if (isPlaying) {
+                                        audio.pause();
+                                        updatePlaybackState(false);
+                                    } else {
+                                        audio.play();
+                                        updatePlaybackState(true);
+                                    }
+                                });
+
+                                // Start Over button click handler
+                                startOverButton.addEventListener('click', () => {
+                                    audio.currentTime = 0;
+                                    if (!isPlaying) {
+                                        audio.play();
+                                        updatePlaybackState(true);
+                                    }
+                                });
+
+                                // Handle audio ending
+                                audio.addEventListener('ended', () => {
+                                    updatePlaybackState(false);
+                                });
+
+                                // Add timeupdate listener
+                                audio.addEventListener('timeupdate', () => {
+                                    const currentTime = audio.currentTime;
+                                    const paragraphs = lyricsContainer.getElementsByTagName('p');
+
+                                    for (let i = 0; i < lyrics.length; i++) {
+                                        if (currentTime >= lyrics[i].time && (!lyrics[i + 1] || currentTime < lyrics[i + 1].time)) {
+                                            Array.from(paragraphs).forEach(p => p.classList.remove('active'));
+                                            paragraphs[i].classList.add('active');
+
+                                            // Only auto-scroll if user hasn't manually scrolled recently
+                                            if (!userScrolled) {
+                                                const offset = paragraphs[i].offsetTop - lyricsContainer.clientHeight / 2 + paragraphs[i].clientHeight / 2;
+                                                lyricsContainer.scrollTo({
+                                                    top: offset,
+                                                    behavior: "smooth"
+                                                });
+                                            }
+                                            break;
+                                        }
+                                    }
+                                });
+                                
+                                lyricsInitialized = true;
+                            })
+                            .catch(error => {
+                                console.error('Error loading lyrics:', error);
+                                lyricsContainer.innerHTML = '<p class="text-red-500">Error loading lyrics. Please check the console for details.</p>';
+                            });
+                    }
+                    
+                    // Adjust grid
+                    bullsGrid.classList.remove('md:grid-cols-3');
+                    card.classList.add('expanded');
+                });
+                
+                // Click on back button to collapse
+                backBtn.addEventListener('click', () => {
+                    // Reset all cards
+                    bullCards.forEach(otherCard => {
+                        otherCard.style.display = 'block';
+                        const otherPreview = otherCard.querySelector('.bull-preview');
+                        const otherDetail = otherCard.querySelector('.bull-detail');
+                        otherPreview.style.display = 'block';
+                        otherDetail.classList.add('hidden');
+                    });
+                    
+                    // Restore grid
+                    bullsGrid.classList.add('md:grid-cols-3');
+                    card.classList.remove('expanded');
+                    
+                    // Stop audio if playing
+                    const audio = card.querySelector('#audioElement');
+                    if (audio) {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
