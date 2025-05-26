@@ -365,7 +365,7 @@
                         });
 
                         // Add this after your existing showTab function
-                        const timerImages = ['timer1.png', 'timer2.png', 'timer3.png'];
+                        const timerImages = ['assets/images/timer1.png', 'assets/images/timer2.png', 'assets/images/timer3.png'];
                         let currentImageIndex = 0;
                         const mainTimerImage = document.getElementById('mainTimerImage');
                         const prevSketch = document.getElementById('prevSketch');
@@ -1237,7 +1237,7 @@
                         
                         // Fetch and parse the LRC file
                 
-                        fetch('lyrics.lrc', {
+                        fetch('assets/song/lyrics.lrc', {
                             method: 'GET',
                             headers: {
                                 'Accept': 'text/plain'
