@@ -779,7 +779,7 @@
                                         clearTimeout(animationTimer);
                                     }
 
-                                    const projectType = iframe.src.includes('dandelion.html') ? 'dandelion' : 
+                                    const projectType = iframe.src.includes('assets/dandelion/dandelion.html') ? 'dandelion' : 
                                                       iframe.src.includes('rain_github.html') ? 'rain' :
                                                       iframe.src.includes('changeme_project.html') ? 'changeme' :
                                                       'default';
@@ -899,7 +899,7 @@
                                 setupContentToggle('rain');
                             } else if (card.querySelector('iframe[src*="changeme_project.html"]')) {
                                 setupContentToggle('changeme');
-                            } else if (card.querySelector('iframe[src*="dandelion.html"]')) {
+                            } else if (card.querySelector('iframe[src*="assets/dandelion/dandelion.html"]')) {
                                 setupContentToggle('dandelion');
                             }
                         }, 200);
@@ -943,7 +943,7 @@
                                 }
 
                                 // Get project type from the iframe source
-                                const projectType = iframe.src.includes('dandelion.html') ? 'dandelion' : 
+                                const projectType = iframe.src.includes('assets/dandelion/dandelion.html') ? 'dandelion' : 
                                                   iframe.src.includes('rain_github.html') ? 'rain' :
                                                   iframe.src.includes('changeme_project.html') ? 'changeme' :
                                                   'default';
