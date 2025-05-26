@@ -780,8 +780,8 @@
                                     }
 
                                     const projectType = iframe.src.includes('assets/dandelion/dandelion.html') ? 'dandelion' : 
-                                                      iframe.src.includes('rain_github.html') ? 'rain' :
-                                                      iframe.src.includes('changeme_project.html') ? 'changeme' :
+                                                      iframe.src.includes('assets/rainletter/rain.html') ? 'rain' :
+                                                      iframe.src.includes('assets/changeme/changeme.html') ? 'changeme' :
                                                       'default';
                                     
                                     const timerDuration = {
@@ -895,9 +895,9 @@
                         setTimeout(() => {
                             projectDetail.classList.add('visible');
                             // Set up content toggle for each project
-                            if (card.querySelector('iframe[src*="rain_github.html"]')) {
+                            if (card.querySelector('iframe[src*="assets/rainletter/rain.html"]')) {
                                 setupContentToggle('rain');
-                            } else if (card.querySelector('iframe[src*="changeme_project.html"]')) {
+                            } else if (card.querySelector('iframe[src*="assets/changeme/changeme.html"]')) {
                                 setupContentToggle('changeme');
                             } else if (card.querySelector('iframe[src*="assets/dandelion/dandelion.html"]')) {
                                 setupContentToggle('dandelion');
@@ -944,8 +944,8 @@
 
                                 // Get project type from the iframe source
                                 const projectType = iframe.src.includes('assets/dandelion/dandelion.html') ? 'dandelion' : 
-                                                  iframe.src.includes('rain_github.html') ? 'rain' :
-                                                  iframe.src.includes('changeme_project.html') ? 'changeme' :
+                                                  iframe.src.includes('assets/rainletter/rain.html') ? 'rain' :
+                                                  iframe.src.includes('assets/changeme/changeme.html') ? 'changeme' :
                                                   'default';
                                 
                                 // Set different timers based on project type
