@@ -234,14 +234,16 @@ input:focus, textarea:focus {
 }
 
 .project-preview {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
 }
 
-.project-card.expanded .project-preview img {
-    height: 400px;
-    object-fit: cover;
+.project-preview img {
+    aspect-ratio: 4/3;
     width: 100%;
-    border-radius: 8px;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px 8px 0 0;
 }
 
 .project-detail {
@@ -649,7 +651,6 @@ audio::-webkit-media-controls-time-remaining-display {
     transform: translateX(-50%) translateY(0);
 }
 
-/* Add this to your existing styles */
 .consent-banner {
     position: fixed;
     bottom: 0;
@@ -807,6 +808,18 @@ audio::-webkit-media-controls-time-remaining-display {
         max-height: none !important;
         overflow-y: visible !important;
     }
+    .project-preview img {
+        min-height: unset !important;
+        max-height: unset !important;
+        height: unset !important;
+    }
+}
+@media (max-width: 600px) {
+    .project-preview img {
+        min-height: unset !important;
+        max-height: unset !important;
+        height: unset !important;
+    }
 }
 
 /* Add to CSS */
@@ -862,4 +875,73 @@ audio::-webkit-media-controls-time-remaining-display {
         padding: 6px 8px;
         max-width: 95vw;
     }
+}
+
+@media (max-width: 600px) {
+    #wonderland-timer .flex-none.mt-auto.pt-6.flex.space-x-4 {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        align-items: stretch !important;
+    }
+    #wonderland-timer .flex-none.mt-auto.pt-6.flex.space-x-4 > button {
+        width: 100% !important;
+        min-width: 0 !important;
+        font-size: 1rem !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .projects-grid,
+    .bulls-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+    .project-card,
+    .bull-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        box-sizing: border-box;
+    }
+}
+
+.aspect-ratio-4-3 {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    border-radius: 8px 8px 0 0;
+    background: #f5f5f5;
+}
+.aspect-ratio-4-3 img {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
+
+/* Remove conflicting image sizing in media queries */
+@media (max-width: 900px) {
+    .project-preview img {
+        min-height: unset !important;
+        max-height: unset !important;
+        height: unset !important;
+    }
+}
+@media (max-width: 600px) {
+    .project-preview img {
+        min-height: unset !important;
+        max-height: unset !important;
+        height: unset !important;
+    }
+}
+
+/* Ensure aspect-ratio-4-3 images fill the container */
+.aspect-ratio-4-3 img {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
 }
