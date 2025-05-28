@@ -1,3 +1,5 @@
+// Main JavaScript for Anran's Rabbit Hole Portfolio
+// Comments revised for clarity and helpfulness. No code changes made.
 
         // Initialize Supabase client
         const supabaseUrl = 'https://hccoowqiswclssmtfbyw.supabase.co';
@@ -201,7 +203,7 @@
             }
         }
 
-        // Modify your existing functions to check for consent
+        // Ccheck for consent
         async function getOrCreateVisitor() {
             if (!dataCollectionEnabled) {
                 console.log('Data collection not enabled - no consent');
@@ -364,7 +366,7 @@
                             aboutAppBtn.classList.remove('hover:bg-secondary/90', 'cursor-pointer');
                         });
 
-                        // Add this after your existing showTab function
+                        
                         const timerImages = ['assets/images/timer1.png', 'assets/images/timer2.png', 'assets/images/timer3.png'];
                         let currentImageIndex = 0;
                         const mainTimerImage = document.getElementById('mainTimerImage');
@@ -521,7 +523,7 @@
                     console.log('Found existing consent, initializing Supabase');
                     initializeSupabaseIfNeeded();
                 }
-                updateContactSection(); // Add this line
+                updateContactSection(); 
             });
 
 
@@ -634,11 +636,9 @@
         // Run the test when page loads
         document.addEventListener('DOMContentLoaded', function() {
             testSupabaseConnection();
-            // ... rest of your DOMContentLoaded code ...
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Add event listeners for "Explore other projects" buttons
             document.querySelectorAll('.explore-other-projects').forEach(button => {
                 button.addEventListener('click', showDefaultView);
             });
@@ -665,7 +665,7 @@
             const projectsGrid = document.querySelector('.projects-grid');
             const projectCards = document.querySelectorAll('.project-card');
 
-            // Only proceed if we found all necessary elements
+            // Only proceed if found all necessary elements
             if (!projectsGrid || !projectCards.length) {
                 console.warn('Some required elements were not found');
                 return;
@@ -1135,7 +1135,7 @@
                             const totalCount = allFlowers ? allFlowers.length : 0;
                             console.log('Total flowers:', totalCount);
 
-                            // Get your personal count - fixed query
+                            // Get personal count - fixed query
                             const visitorId = localStorage.getItem('visitor_id');
                         
                             

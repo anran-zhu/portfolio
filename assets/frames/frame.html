@@ -119,6 +119,11 @@
             font-size: clamp(1rem, 1.2vw, 1.125rem);
         }
 
+        .font-bold {
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
         @media (max-width: 900px) {
             #hoverText {
                 padding: 2rem 1rem;
@@ -158,7 +163,7 @@
     <div id="hoverText">
         <h1>I Framed My Memories</h1>
         <p>I framed my memories between the outstretched branches of trees. They bring colour to my dull life.</p>
-        <p>Hover over each frame to glimpse a memory. Click to unravel its story.</p>
+        <p><span class="font-bold">Hover over</span> each frame to glimpse a memory. <span class="font-bold">Click</span> to unravel its story.</p>
     </div>
     <button id="closeButton">Close</button>
 </div>
@@ -171,7 +176,11 @@
     let activePath = null;
     let isLocked = false;
 
-    // Define your regions here
+    // Memory Tree Interactive Frame logic
+    // This file displays an interactive memory tree with SVG overlays and region-based stories.
+    // Comments have been revised for clarity.
+
+    // Region definitions
     const regions = {
         path1: {
             image: 'frame1.JPG',
@@ -294,7 +303,7 @@
         hoverText.innerHTML = `
             <h1>I Framed My Memories</h1>
             <p>I framed my memories between the outstretched branches of trees. They bring colour to my dull life.</p>
-            <p>Hover over each frame to glimpse a memory. Click to unravel its story.</p>
+            <p><span class="font-bold">Hover over</span> each frame to glimpse a memory. <span class="font-bold">Click</span> to unravel its story.</p>
         `;
         closeButton.style.display = "none";
         isLocked = false;

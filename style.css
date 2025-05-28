@@ -483,7 +483,7 @@ input:focus, textarea:focus {
     display: block;
 }
 
-/* Add these new styles */
+/* Flower animation styles for the flower-bloom effect */
 .flower-bloom {
     transform-origin: center;
 }
@@ -527,7 +527,7 @@ input:focus, textarea:focus {
     transform: translate(-50%, -50%) scale(1);
 }
 
-/* Add after your existing styles */
+/* Styles for memory frame cards */
 .memory-frame {
     border: 1px solid rgba(180, 161, 147, 0.2);
     background: linear-gradient(to bottom right, #fff, #faf8f6);
@@ -554,7 +554,7 @@ input:focus, textarea:focus {
     object-fit: cover;
 }
 
-/* Add these styles to your existing styles */
+/* Custom scrollbar and lyrics section styles */
 #lyrics {
     scroll-behavior: smooth;
     overflow-y: auto;
@@ -606,7 +606,7 @@ audio::-webkit-media-controls-time-remaining-display {
     color: white;
 }
 
-/* Add these styles to your existing styles section */
+/* Styles for the flower animation overlay and count display */
 #flowerAnimation {
     position: fixed;
     inset: 0;
@@ -847,4 +847,19 @@ audio::-webkit-media-controls-time-remaining-display {
     width: auto !important;
     flex-shrink: 0 !important;
   }
+}
+
+@media (max-width: 900px) {
+    .flower-count-display {
+        font-size: 1.2rem;
+        padding: 8px 12px;
+        max-width: 80vw;
+    }
+}
+@media (max-width: 600px) {
+    .flower-count-display {
+        font-size: 1rem;
+        padding: 6px 8px;
+        max-width: 95vw;
+    }
 }
