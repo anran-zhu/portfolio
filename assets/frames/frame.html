@@ -23,7 +23,7 @@
             display: grid;
             grid-template-columns: auto 1fr;
             align-items: center;
-            overflow: hidden;
+            overflow: auto;
         }
 
         /* Background image */
@@ -118,13 +118,43 @@
             margin-top: 1.5rem;
             font-size: clamp(1rem, 1.2vw, 1.125rem);
         }
+
+        @media (max-width: 900px) {
+            #hoverText {
+                padding: 2rem 1rem;
+                margin-left: 0;
+                font-size: 1rem;
+            }
+            #closeButton {
+                right: 1rem;
+                bottom: 1rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            #hoverText {
+                padding: 1rem 0.5rem;
+                font-size: 0.95rem;
+            }
+            #hoverText h1 {
+                font-size: 2rem;
+            }
+            #closeButton {
+                right: 0.5rem;
+                bottom: 0.5rem;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div id="container">
-    <img id="backgroundImage" src="assets/frames/black_and_white.JPG" alt="Background Image">
-    <object id="svgObject" data="assets/frames/frames.svg" type="image/svg+xml"></object>
+    <img id="backgroundImage" src="black_and_white.JPG" alt="Background Image">
+    <object id="svgObject" data="frames.svg" type="image/svg+xml"></object>
     <div id="hoverText">
         <h1>I Framed My Memories</h1>
         <p>I framed my memories between the outstretched branches of trees. They bring colour to my dull life.</p>
@@ -144,55 +174,55 @@
     // Define your regions here
     const regions = {
         path1: {
-            image: 'assets/frames/frame1.JPG',
+            image: 'frame1.JPG',
             title: 'Sintra, Portugal',
             text: 'The Cabo da Roca Lighthouse. They say it is the loneliest job, being the lighthouse keeper at the end of the world.',
             date: '17 January, 2025'
         },
         path2: {
-            image: 'assets/frames/frame2.JPG',
+            image: 'frame2.JPG',
             title: 'Lisbon, Portugal',
             text: 'Watching sunset from a boat in Tagus River. The sunlight stung my eyes and the wind scattered my mind. I held onto the pastel de nata in my pocket that I got from that shop in Belém, the one that supposedly makes the best in the world. It somehow anchored me.',
             date: '16 January, 2025'
         },
         path3: {
-            image: 'assets/frames/frame3.JPG',
+            image: 'frame3.JPG',
             title: 'Barcelona, Spain',
             text: 'We got to Barcelona Beach at 6 AM to catch the sunrise. We watched as the sky shifted from tar black to deep blue, then purple, then pink, and finally back to blue. I could be biased becasue I had barely slept for 3 days, but I would say it was the dreamiest moment of that trip.',
             date: '19 December, 2024'
         },
         path4: {
-            image: 'assets/frames/frame4.JPG',
+            image: 'frame4.JPG',
             title: 'Highlands, Scotland',
             text: 'It rained when we were hiking in Glenfinnan. We were soaken wet. But for a brief moment, the sun broke through. Suddenly, everyone stopped and stared. I followed their gaze. And there it was, a rainbow. It was the first time I had ever seen one.',
             date: '12 October, 2024'
         },
         path5: {
-            image: 'assets/frames/frame5.JPG',
+            image: 'frame5.JPG',
             title: 'Hague, Netherlands',
             text: 'I felt like I had been avoiding tulips, for reasons unknown to me. If I had to guess, it is becasue they bloom in spring. And spring, with all its hope, can also mean disappointment. Hope is a dangerous thing for a woman like me to have, but I guess, I have it.',
             date: '8 April, 2025'
         },
         path6: {
-            image: 'assets/frames/frame6.JPG',
+            image: 'frame6.JPG',
             title: 'Paris, France',
             text: 'It was late when I finally got to Paris. I took the beer I had bought in Belgium and sat by the river near my hostel. The lights on the water shimmered like a Van Gogh painting. The river is Pont Louis-Philippe, by the way.',
             date: '14 April, 2025'
         },
         path7: {
-            image: 'assets/frames/frame7.JPG',
+            image: 'frame7.JPG',
             title: 'Bruges, Belgium',
             text: 'This is the lake of love at Bruges. Nothing special really. But hey, maybe I was doing it the wrong way. You should not come here all by yourslef.',
             date: '12 April, 2025'
         },
         path8: {
-            image: 'assets/frames/frame8.JPG',
+            image: 'frame8.JPG',
             title: 'Newcastle, England',
             text: 'I had just returned back from my trip. The cherry blossoms were in full bloom, more beautiful than any attraction I had seen along the way. Standing beneath that canopy of pink, I thought to myself, I should appreciate life in these everyday moments, not just when I am away.',
             date: '20 April, 2025'
         },
         path9: {
-            image: 'assets/frames/frame9.JPG',
+            image: 'frame9.JPG',
             title: 'Lisbon, Portugal',
             text: 'I thought it would be kind of weird, standing in the place I had dreamt (literally, in my sleep) for years. But it was a very peaceful and quiet moment.',
             date: '15 January, 2025'
@@ -234,7 +264,7 @@
                 region.addEventListener('mouseleave', () => {
                     if (!isLocked) {
                         console.log(`❄️ Mouse left ${pathId}.`);
-                        backgroundImage.src = 'assets/frames/black_and_white.JPG';
+                        backgroundImage.src = 'black_and_white.JPG';
                     }
                 });
 
@@ -260,7 +290,7 @@
 
     closeButton.addEventListener('click', () => {
         console.log("🗑️ Reset view");
-        backgroundImage.src = 'assets/frames/black_and_white.JPG';
+        backgroundImage.src = 'black_and_white.JPG';
         hoverText.innerHTML = `
             <h1>I Framed My Memories</h1>
             <p>I framed my memories between the outstretched branches of trees. They bring colour to my dull life.</p>
